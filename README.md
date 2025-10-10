@@ -1,0 +1,1 @@
+This repository contains the implementation of four controllers for trajectory performance analysis on the turtlebot3 waffle robot. The controllers used are: PID, Lyapunov, Pure Pursuit, and MPC. Metrics are stored in the tb3_runs folder for later analysis. 
