@@ -174,6 +174,7 @@ def generate_summary_comparison(directory_path, output_dir='charts'):
 
             metrics = {
                 'IAE': np.trapezoid(np.abs(err), t),
+                'ITAE': np.trapezoid(t * np.abs(err), t),
                 'ISE': np.trapezoid(err**2, t),
                 'ICE': np.trapezoid(v**2 + w**2, t),
                 'max_error': np.max(np.abs(err)),
@@ -201,7 +202,7 @@ def generate_summary_comparison(directory_path, output_dir='charts'):
             }
 
     # Create comprehensive comparison figure
-    fig = plt.figure(figsize=(18, 12))
+    fig = plt.figure(figsize=(20, 14))
     fig.suptitle('Controller Performance Comparison - All Controllers',
                  fontsize=18, fontweight='bold')
 
@@ -209,7 +210,7 @@ def generate_summary_comparison(directory_path, output_dir='charts'):
     colors = plt.cm.Set3(np.linspace(0, 1, len(controllers)))
 
     # 1. IAE Comparison
-    ax1 = plt.subplot(2, 3, 1)
+    ax1 = plt.subplot(3, 3, 1)
     means = [controller_stats[c]['IAE']['mean'] for c in controllers]
     stds = [controller_stats[c]['IAE']['std'] for c in controllers]
     bars = ax1.bar(controllers, means, yerr=stds, capsize=5, color=colors,
@@ -223,66 +224,80 @@ def generate_summary_comparison(directory_path, output_dir='charts'):
         ax1.text(bar.get_x() + bar.get_width()/2., height,
                 f'{height:.3f}', ha='center', va='bottom', fontsize=9)
 
-    # 2. ISE Comparison
-    ax2 = plt.subplot(2, 3, 2)
-    means = [controller_stats[c]['ISE']['mean'] for c in controllers]
-    stds = [controller_stats[c]['ISE']['std'] for c in controllers]
+    # 2. ITAE Comparison
+    ax2 = plt.subplot(3, 3, 2)
+    means = [controller_stats[c]['ITAE']['mean'] for c in controllers]
+    stds = [controller_stats[c]['ITAE']['std'] for c in controllers]
     bars = ax2.bar(controllers, means, yerr=stds, capsize=5, color=colors,
                    edgecolor='black', linewidth=1.5, alpha=0.8)
-    ax2.set_ylabel('ISE (m²·s)', fontsize=11, fontweight='bold')
-    ax2.set_title('Integral of Squared Error (ISE)', fontweight='bold', fontsize=12)
+    ax2.set_ylabel('ITAE (m·s²)', fontsize=11, fontweight='bold')
+    ax2.set_title('Integral of Time-weighted Absolute Error (ITAE)', fontweight='bold', fontsize=12)
     ax2.grid(True, alpha=0.3, axis='y')
     for bar in bars:
         height = bar.get_height()
         ax2.text(bar.get_x() + bar.get_width()/2., height,
                 f'{height:.3f}', ha='center', va='bottom', fontsize=9)
 
-    # 3. ICE Comparison
-    ax3 = plt.subplot(2, 3, 3)
-    means = [controller_stats[c]['ICE']['mean'] for c in controllers]
-    stds = [controller_stats[c]['ICE']['std'] for c in controllers]
+    # 3. ISE Comparison
+    ax3 = plt.subplot(3, 3, 3)
+    means = [controller_stats[c]['ISE']['mean'] for c in controllers]
+    stds = [controller_stats[c]['ISE']['std'] for c in controllers]
     bars = ax3.bar(controllers, means, yerr=stds, capsize=5, color=colors,
                    edgecolor='black', linewidth=1.5, alpha=0.8)
-    ax3.set_ylabel('ICE', fontsize=11, fontweight='bold')
-    ax3.set_title('Integral of Control Effort (ICE)', fontweight='bold', fontsize=12)
+    ax3.set_ylabel('ISE (m²·s)', fontsize=11, fontweight='bold')
+    ax3.set_title('Integral of Squared Error (ISE)', fontweight='bold', fontsize=12)
     ax3.grid(True, alpha=0.3, axis='y')
     for bar in bars:
         height = bar.get_height()
         ax3.text(bar.get_x() + bar.get_width()/2., height,
                 f'{height:.3f}', ha='center', va='bottom', fontsize=9)
 
-    # 4. Mean Error Comparison
-    ax4 = plt.subplot(2, 3, 4)
-    means = [controller_stats[c]['mean_error']['mean'] for c in controllers]
-    stds = [controller_stats[c]['mean_error']['std'] for c in controllers]
+    # 4. ICE Comparison
+    ax4 = plt.subplot(3, 3, 4)
+    means = [controller_stats[c]['ICE']['mean'] for c in controllers]
+    stds = [controller_stats[c]['ICE']['std'] for c in controllers]
     bars = ax4.bar(controllers, means, yerr=stds, capsize=5, color=colors,
                    edgecolor='black', linewidth=1.5, alpha=0.8)
-    ax4.set_ylabel('Mean Error (m)', fontsize=11, fontweight='bold')
-    ax4.set_title('Average Tracking Error', fontweight='bold', fontsize=12)
+    ax4.set_ylabel('ICE', fontsize=11, fontweight='bold')
+    ax4.set_title('Integral of Control Effort (ICE)', fontweight='bold', fontsize=12)
     ax4.grid(True, alpha=0.3, axis='y')
     for bar in bars:
         height = bar.get_height()
         ax4.text(bar.get_x() + bar.get_width()/2., height,
-                f'{height:.4f}', ha='center', va='bottom', fontsize=9)
+                f'{height:.3f}', ha='center', va='bottom', fontsize=9)
 
-    # 5. Max Error Comparison
-    ax5 = plt.subplot(2, 3, 5)
-    means = [controller_stats[c]['max_error']['mean'] for c in controllers]
-    stds = [controller_stats[c]['max_error']['std'] for c in controllers]
+    # 5. Mean Error Comparison
+    ax5 = plt.subplot(3, 3, 5)
+    means = [controller_stats[c]['mean_error']['mean'] for c in controllers]
+    stds = [controller_stats[c]['mean_error']['std'] for c in controllers]
     bars = ax5.bar(controllers, means, yerr=stds, capsize=5, color=colors,
                    edgecolor='black', linewidth=1.5, alpha=0.8)
-    ax5.set_ylabel('Max Error (m)', fontsize=11, fontweight='bold')
-    ax5.set_title('Maximum Tracking Error', fontweight='bold', fontsize=12)
+    ax5.set_ylabel('Mean Error (m)', fontsize=11, fontweight='bold')
+    ax5.set_title('Average Tracking Error', fontweight='bold', fontsize=12)
     ax5.grid(True, alpha=0.3, axis='y')
     for bar in bars:
         height = bar.get_height()
         ax5.text(bar.get_x() + bar.get_width()/2., height,
                 f'{height:.4f}', ha='center', va='bottom', fontsize=9)
 
-    # 6. Overall Performance Score (normalized)
-    ax6 = plt.subplot(2, 3, 6)
+    # 6. Max Error Comparison
+    ax6 = plt.subplot(3, 3, 6)
+    means = [controller_stats[c]['max_error']['mean'] for c in controllers]
+    stds = [controller_stats[c]['max_error']['std'] for c in controllers]
+    bars = ax6.bar(controllers, means, yerr=stds, capsize=5, color=colors,
+                   edgecolor='black', linewidth=1.5, alpha=0.8)
+    ax6.set_ylabel('Max Error (m)', fontsize=11, fontweight='bold')
+    ax6.set_title('Maximum Tracking Error', fontweight='bold', fontsize=12)
+    ax6.grid(True, alpha=0.3, axis='y')
+    for bar in bars:
+        height = bar.get_height()
+        ax6.text(bar.get_x() + bar.get_width()/2., height,
+                f'{height:.4f}', ha='center', va='bottom', fontsize=9)
+
+    # 7. Overall Performance Score (normalized)
+    ax7 = plt.subplot(3, 3, 8)
     # Normalize metrics (lower is better, so invert)
-    metrics_to_score = ['IAE', 'ISE', 'ICE', 'mean_error', 'max_error']
+    metrics_to_score = ['IAE', 'ITAE', 'ISE', 'ICE', 'mean_error', 'max_error']
     scores = []
 
     for controller in controllers:
@@ -293,16 +308,16 @@ def generate_summary_comparison(directory_path, output_dir='charts'):
             score += normalized
         scores.append(score / len(metrics_to_score) * 100)  # Convert to percentage
 
-    bars = ax6.bar(controllers, scores, color=colors, edgecolor='black',
+    bars = ax7.bar(controllers, scores, color=colors, edgecolor='black',
                    linewidth=1.5, alpha=0.8)
-    ax6.set_ylabel('Performance Score (%)', fontsize=11, fontweight='bold')
-    ax6.set_title('Overall Performance Score\n(Higher is Better)',
+    ax7.set_ylabel('Performance Score (%)', fontsize=11, fontweight='bold')
+    ax7.set_title('Overall Performance Score\n(Higher is Better)',
                   fontweight='bold', fontsize=12)
-    ax6.set_ylim([0, 100])
-    ax6.grid(True, alpha=0.3, axis='y')
+    ax7.set_ylim([0, 100])
+    ax7.grid(True, alpha=0.3, axis='y')
     for bar in bars:
         height = bar.get_height()
-        ax6.text(bar.get_x() + bar.get_width()/2., height,
+        ax7.text(bar.get_x() + bar.get_width()/2., height,
                 f'{height:.1f}%', ha='center', va='bottom', fontsize=9)
 
     plt.tight_layout()
@@ -334,8 +349,8 @@ def generate_statistics_table(controller_stats, output_dir):
 
     # Prepare table data
     controllers = list(controller_stats.keys())
-    metrics = ['IAE', 'ISE', 'ICE', 'mean_error', 'max_error', 'final_error']
-    metric_names = ['IAE (m·s)', 'ISE (m²·s)', 'ICE', 'Mean Error (m)',
+    metrics = ['IAE', 'ITAE', 'ISE', 'ICE', 'mean_error', 'max_error', 'final_error']
+    metric_names = ['IAE (m·s)', 'ITAE (m·s²)', 'ISE (m²·s)', 'ICE', 'Mean Error (m)',
                     'Max Error (m)', 'Final Error (m)']
 
     table_data = []
