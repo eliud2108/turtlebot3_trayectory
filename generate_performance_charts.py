@@ -6,7 +6,6 @@ This script creates:
 1. Individual performance charts for each controller run
 2. Summary comparison charts for all controllers
 
-Author: Claude AI
 Date: 2025-11-05
 """
 
@@ -495,3 +494,4 @@ if __name__ == "__main__":
     else:
         # Generate all charts
         generate_all_charts(args.directory, args.output, args.max_individual)
+
