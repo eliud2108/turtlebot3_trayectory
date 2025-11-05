@@ -8,7 +8,7 @@ Metrics calculated:
 - ISE: Integral of Squared Error
 - ICE: Integral of Control Effort
 
-Author: Claude AI
+
 Date: 2025-11-05
 """
 
@@ -255,3 +255,4 @@ if __name__ == "__main__":
 
             print("\nFor detailed results, see the CSV file:")
             print(f"→ {os.path.join(args.directory, args.output)}")
+
