@@ -57,7 +57,9 @@ Las gráficas generadas incluyen:
 
 #  Compilar paquete
 cd ~/turtlebot3_pruebas
+
 colcon build --packages-select turtlebot3_control
+
 source install/setup.bash
 
 export TURTLEBOT3_MODEL=waffle
