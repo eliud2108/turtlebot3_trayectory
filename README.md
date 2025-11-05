@@ -65,13 +65,13 @@ source install/setup.bash
 export TURTLEBOT3_MODEL=waffle
 
 # Para simulación
-1. se corre ros2 launch turtlebot3_gazebo empty_world.launch.py
+1. Se corre ros2 launch turtlebot3_gazebo empty_world.launch.py
 
-2. luego en otra pestaña se corre el controlador correspondiente.
+2. Luego en otra pestaña se corre el controlador correspondiente.
 
 
-# Para robot fisico
-# En el robot
+# Para Robot físico
+# En el Robot
 ros2 launch turtlebot3_bringup robot.launch.py
 
 ## CONTROLADORES
