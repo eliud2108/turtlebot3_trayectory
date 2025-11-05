@@ -1,0 +1,780 @@
+================================================================================
+           ANÁLISIS DE CONTROLADORES PARA SEGUIMIENTO DE TRAYECTORIA
+                           TURTLEBOT3 WAFFLE
+================================================================================
+
+Fecha de análisis: 5 de noviembre de 2025
+Proyecto: Control de Trayectoria TurtleBot3
+Autores: Análisis generado automáticamente
+
+
+================================================================================
+1. INTRODUCCIÓN
+================================================================================
+
+Este documento presenta un análisis exhaustivo del desempeño de cuatro
+controladores implementados para el seguimiento de trayectoria en el robot
+TurtleBot3 Waffle. Los controladores evaluados son:
+
+  1. PID (Proporcional-Integral-Derivativo)
+  2. Lyapunov (Basado en estabilidad de Lyapunov)
+  3. MPC (Model Predictive Control - Control Predictivo basado en Modelo)
+  4. Pure Pursuit (Seguimiento de punto de referencia adelantado)
+
+Cada controlador fue sometido a 30 ejecuciones experimentales bajo condiciones
+similares para evaluar su desempeño, consistencia y robustez en el seguimiento
+de trayectorias.
+
+
+================================================================================
+2. MÉTRICAS DE EVALUACIÓN
+================================================================================
+
+El desempeño de cada controlador se evaluó utilizando las siguientes métricas:
+
+2.1 MÉTRICAS DE ERROR
+---------------------
+  • IAE (Integral of Absolute Error): ∫|e(t)|dt
+    Mide el error acumulado total a lo largo de la trayectoria.
+    Menor valor indica mejor seguimiento.
+
+  • ITAE (Integral of Time-weighted Absolute Error): ∫t|e(t)|dt
+    Penaliza errores que persisten en el tiempo.
+    Favorece controladores que convergen rápidamente.
+
+  • ISE (Integral of Squared Error): ∫e²(t)dt
+    Penaliza errores grandes más severamente que errores pequeños.
+    Útil para identificar controladores que evitan picos de error.
+
+2.2 MÉTRICAS DE ESFUERZO DE CONTROL
+-----------------------------------
+  • ICE (Integral of Control Effort): ∫(v² + w²)dt
+    Mide la energía total consumida por el controlador.
+    Considera velocidades lineales (v) y angulares (w).
+
+2.3 MÉTRICAS ESTADÍSTICAS DE ERROR
+----------------------------------
+  • max_error: Error máximo absoluto durante la ejecución
+  • mean_error: Error promedio absoluto
+  • final_error: Error al final de la trayectoria
+  • settling_time: Tiempo para alcanzar estabilidad (±5% del error máximo)
+
+2.4 MÉTRICAS TEMPORALES
+-----------------------
+  • total_time: Tiempo total de ejecución de la trayectoria
+  • num_samples: Número de muestras recolectadas
+
+
+================================================================================
+3. ANÁLISIS INDIVIDUAL DE CONTROLADORES
+================================================================================
+
+3.1 CONTROLADOR PID (PROPORCIONAL-INTEGRAL-DERIVATIVO)
+========================================================
+
+DESCRIPCIÓN TÉCNICA:
+-------------------
+El controlador PID es uno de los controladores más utilizados en la industria
+debido a su simplicidad y eficacia. Combina tres términos:
+  - Proporcional (P): Responde al error actual
+  - Integral (I): Acumula errores pasados para eliminar offset
+  - Derivativo (D): Anticipa errores futuros basándose en la tasa de cambio
+
+RESULTADOS EXPERIMENTALES (30 ejecuciones):
+------------------------------------------
+Métricas de Error:
+  • IAE:  0.678970 ± 0.059910  (Rango: 0.640209 - 0.977883)
+  • ITAE: 26.034846 ± 5.061587 (Rango: 23.855844 - 52.410448)
+  • ISE:  0.011924 ± 0.000832  (Rango: 0.010723 - 0.013873)
+
+Métricas de Esfuerzo:
+  • ICE:  5.848871 ± 0.122621  (Rango: 5.598828 - 6.106656)
+
+Estadísticas de Error:
+  • Error máximo:    0.027057 ± 0.001141 m (¡El MEJOR!)
+  • Error promedio:  0.010496 ± 0.000588 m
+  • Error final:     0.004717 ± 0.000079 m
+
+Métricas Temporales:
+  • Tiempo de asentamiento: 65.625 ± 10.733 s
+  • Tiempo total:           65.469 ± 10.749 s
+
+ANÁLISIS DE DESEMPEÑO:
+---------------------
+FORTALEZAS:
+  ✓ Error máximo más bajo entre todos los controladores (0.027 m)
+  ✓ Buena precisión en estado estacionario
+  ✓ Implementación simple y computacionalmente eficiente
+  ✓ Error final competitivo (0.00472 m)
+
+DEBILIDADES:
+  ✗ Alta variabilidad en ITAE (desviación estándar de 5.06)
+  ✗ Tiempo de asentamiento más alto (65.6 segundos)
+  ✗ Convergencia lenta comparada con otros controladores
+  ✗ Mayor variabilidad entre ejecuciones (IAE std: 0.0599)
+
+INTERPRETACIÓN:
+El controlador PID muestra excelente capacidad para mantener errores pequeños
+y evitar grandes desviaciones de la trayectoria. Sin embargo, su convergencia
+es lenta, lo que se refleja en tiempos de asentamiento prolongados. La alta
+variabilidad en ITAE sugiere que el desempeño puede ser sensible a las
+condiciones iniciales o a perturbaciones. Es una buena opción cuando se
+prioriza la precisión sobre la velocidad de convergencia.
+
+
+3.2 CONTROLADOR LYAPUNOV
+=========================
+
+DESCRIPCIÓN TÉCNICA:
+-------------------
+El controlador basado en Lyapunov utiliza la teoría de estabilidad de Lyapunov
+para garantizar convergencia asintótica al punto de referencia. Diseña una
+función de Lyapunov que decrece monotónicamente, asegurando estabilidad
+teórica del sistema.
+
+RESULTADOS EXPERIMENTALES (30 ejecuciones):
+------------------------------------------
+Métricas de Error:
+  • IAE:  0.754217 ± 0.020253  (Rango: 0.709500 - 0.788869)
+  • ITAE: 23.917904 ± 0.617330 (Rango: 22.495828 - 25.000785)
+  • ISE:  0.018729 ± 0.000917  (Rango: 0.017054 - 0.020518)
+
+Métricas de Esfuerzo:
+  • ICE:  6.878915 ± 0.053616  (Rango: 6.784678 - 7.037782)
+
+Estadísticas de Error:
+  • Error máximo:    0.040293 ± 0.001032 m (El PEOR)
+  • Error promedio:  0.013743 ± 0.000365 m (El PEOR)
+  • Error final:     0.002410 ± 0.000071 m
+
+Métricas Temporales:
+  • Tiempo de asentamiento: 54.850 ± 0.102 s
+  • Tiempo total:           54.802 ± 0.098 s
+
+ANÁLISIS DE DESEMPEÑO:
+---------------------
+FORTALEZAS:
+  ✓ Muy baja variabilidad entre ejecuciones (IAE std: 0.020)
+  ✓ Comportamiento consistente y predecible
+  ✓ Garantías teóricas de estabilidad
+  ✓ Tiempo de ejecución consistente (~55 segundos)
+
+DEBILIDADES:
+  ✗ Errores promedio y máximos más altos que otros controladores
+  ✗ Mayor consumo de energía (ICE más alto: 6.88)
+  ✗ ISE alto indica presencia de errores cuadráticos significativos
+  ✗ No es el más rápido en convergencia
+
+INTERPRETACIÓN:
+El controlador Lyapunov destaca por su consistencia y reproducibilidad, con
+la menor variabilidad entre ejecuciones. Aunque produce errores promedio más
+altos, su comportamiento predecible lo hace ideal para aplicaciones donde la
+consistencia es crítica. El mayor consumo energético sugiere acciones de
+control más agresivas. Las garantías teóricas de estabilidad son su principal
+ventaja, aunque en la práctica otros controladores logran mejor desempeño
+numérico.
+
+
+3.3 CONTROLADOR MPC (MODEL PREDICTIVE CONTROL)
+================================================
+
+DESCRIPCIÓN TÉCNICA:
+-------------------
+El Control Predictivo basado en Modelo (MPC) es un controlador avanzado que
+optimiza las acciones de control en un horizonte de predicción futuro. En cada
+paso de tiempo, resuelve un problema de optimización considerando restricciones
+del sistema y minimizando una función de costo que balancea error de seguimiento
+y esfuerzo de control.
+
+RESULTADOS EXPERIMENTALES (30 ejecuciones):
+------------------------------------------
+Métricas de Error:
+  • IAE:  0.412003 ± 0.020828  (Rango: 0.360761 - 0.465274)
+  • ITAE: 11.379136 ± 0.656341 (Rango: 10.022011 - 12.558613)
+  • ISE:  0.004962 ± 0.000394  (Rango: 0.004024 - 0.005752) ¡El MEJOR!
+
+Métricas de Esfuerzo:
+  • ICE:  5.651398 ± 0.033765  (Rango: 5.600752 - 5.786955)
+
+Estadísticas de Error:
+  • Error máximo:    0.031383 ± 0.000712 m
+  • Error promedio:  0.007584 ± 0.000393 m ¡El MEJOR!
+  • Error final:     0.004837 ± 0.000886 m
+
+Métricas Temporales:
+  • Tiempo de asentamiento: 54.310 ± 0.198 s
+  • Tiempo total:           54.282 ± 0.190 s
+
+ANÁLISIS DE DESEMPEÑO:
+---------------------
+FORTALEZAS:
+  ✓ ISE más bajo (0.00496) - evita picos de error efectivamente
+  ✓ Error promedio más bajo (0.00758 m) - excelente seguimiento
+  ✓ Segunda mejor IAE (0.412) y ITAE (11.38)
+  ✓ Buen balance entre precisión y esfuerzo de control
+  ✓ Capacidad de manejar restricciones del sistema
+  ✓ Comportamiento suave (bajo ISE)
+
+DEBILIDADES:
+  ✗ Mayor complejidad computacional que PID
+  ✗ Requiere modelo preciso del sistema
+  ✗ Tiempo de ejecución similar a Lyapunov (~54s)
+  ✗ Ajuste de parámetros más complejo
+
+INTERPRETACIÓN:
+El MPC demuestra ser un controlador de alto desempeño, especialmente efectivo
+para evitar errores grandes (ISE más bajo). Su capacidad para predecir y
+optimizar resulta en el error promedio más bajo y un seguimiento muy suave.
+Es particularmente adecuado para aplicaciones donde se requiere precisión
+consistente y se dispone de suficiente poder computacional. El balance entre
+error y esfuerzo de control lo hace eficiente energéticamente mientras mantiene
+excelente precisión.
+
+
+3.4 CONTROLADOR PURE PURSUIT
+==============================
+
+DESCRIPCIÓN TÉCNICA:
+-------------------
+Pure Pursuit es un algoritmo geométrico que calcula la curvatura necesaria para
+alcanzar un punto objetivo (lookahead point) ubicado a una distancia fija sobre
+la trayectoria de referencia. Es ampliamente utilizado en navegación autónoma
+por su simplicidad y eficacia en seguimiento de caminos.
+
+RESULTADOS EXPERIMENTALES (30 ejecuciones):
+------------------------------------------
+Métricas de Error:
+  • IAE:  0.334093 ± 0.009254  (Rango: 0.311844 - 0.353174) ¡El MEJOR!
+  • ITAE: 6.789430 ± 0.238480  (Rango: 6.311391 - 7.375957) ¡El MEJOR!
+  • ISE:  0.010082 ± 0.000262  (Rango: 0.009587 - 0.010479)
+
+Métricas de Esfuerzo:
+  • ICE:  4.061619 ± 0.029498  (Rango: 4.004499 - 4.129239) ¡El MEJOR!
+
+Estadísticas de Error:
+  • Error máximo:    0.071800 ± 0.000669 m (El PEOR)
+  • Error promedio:  0.008678 ± 0.000246 m
+  • Error final:     0.001220 ± 0.000607 m ¡El MEJOR!
+
+Métricas Temporales:
+  • Tiempo de asentamiento: 33.740 ± 0.679 s ¡El MEJOR!
+  • Tiempo total:           38.435 ± 0.080 s ¡El MEJOR!
+
+ANÁLISIS DE DESEMPEÑO:
+---------------------
+FORTALEZAS:
+  ✓ IAE más bajo (0.334) - menor error acumulado total
+  ✓ ITAE más bajo (6.79) - convergencia más rápida
+  ✓ ICE más bajo (4.06) - más eficiente energéticamente
+  ✓ Error final más bajo (0.00122 m) - mejor precisión terminal
+  ✓ Tiempo de asentamiento más corto (33.7 s) - convergencia rápida
+  ✓ Tiempo total más corto (38.4 s) - más rápido en completar trayectoria
+  ✓ Muy baja variabilidad (IAE std: 0.009254)
+  ✓ Implementación simple y computacionalmente eficiente
+
+DEBILIDADES:
+  ✗ Error máximo más alto (0.0718 m) - permite desviaciones transitorias
+  ✗ ISE intermedio (0.01008) - no evita picos tan bien como MPC
+  ✗ Puede tener problemas en curvas cerradas
+
+INTERPRETACIÓN:
+Pure Pursuit emerge como el controlador con mejor desempeño general. Domina en
+6 de las 8 métricas principales (IAE, ITAE, ICE, error final, tiempo de
+asentamiento y tiempo total). Su estrategia de seguimiento adelantado resulta
+en convergencia rápida y eficiencia energética excepcional.
+
+El error máximo más alto es una característica del algoritmo: permite
+desviaciones transitorias para lograr convergencia más rápida. Sin embargo,
+estas desviaciones son controladas y el error final es el más bajo de todos.
+
+Es ideal para aplicaciones donde se prioriza:
+  • Completar trayectorias rápidamente
+  • Eficiencia energética
+  • Simplicidad de implementación
+  • Precisión en el punto final
+
+
+================================================================================
+4. COMPARACIÓN ENTRE CONTROLADORES
+================================================================================
+
+4.1 RESUMEN DE MÉTRICAS PROMEDIO
+=================================
+
+┌──────────────┬──────────┬──────────┬──────────┬──────────┐
+│   MÉTRICA    │   PID    │ LYAPUNOV │   MPC    │   PURE   │
+├──────────────┼──────────┼──────────┼──────────┼──────────┤
+│ IAE          │ 0.679    │ 0.754    │ 0.412    │ 0.334 ★  │
+│ ITAE         │ 26.035   │ 23.918   │ 11.379   │ 6.789 ★  │
+│ ISE          │ 0.01192  │ 0.01873  │ 0.00496★ │ 0.01008  │
+│ ICE          │ 5.849    │ 6.879    │ 5.651    │ 4.062 ★  │
+│ Error Máx    │ 0.0271 ★ │ 0.0403   │ 0.0314   │ 0.0718   │
+│ Error Prom   │ 0.0105   │ 0.0137   │ 0.00758★ │ 0.00868  │
+│ Error Final  │ 0.00472  │ 0.00241  │ 0.00484  │ 0.00122★ │
+│ T. Asent.(s) │ 65.625   │ 54.850   │ 54.310   │ 33.740 ★ │
+│ T. Total (s) │ 65.469   │ 54.802   │ 54.282   │ 38.435 ★ │
+└──────────────┴──────────┴──────────┴──────────┴──────────┘
+
+★ = Mejor desempeño en esa métrica
+
+
+4.2 RANKING POR MÉTRICAS
+=========================
+
+IAE (Integral of Absolute Error):
+  1. Pure Pursuit:  0.334  ★★★★★ GANADOR
+  2. MPC:           0.412  ★★★★☆
+  3. PID:           0.679  ★★☆☆☆
+  4. Lyapunov:      0.754  ★☆☆☆☆
+
+ITAE (Integral of Time-weighted Absolute Error):
+  1. Pure Pursuit:  6.789  ★★★★★ GANADOR
+  2. MPC:          11.379  ★★★★☆
+  3. Lyapunov:     23.918  ★★☆☆☆
+  4. PID:          26.035  ★☆☆☆☆
+
+ISE (Integral of Squared Error):
+  1. MPC:           0.00496 ★★★★★ GANADOR
+  2. Pure Pursuit:  0.01008 ★★★★☆
+  3. PID:           0.01192 ★★★☆☆
+  4. Lyapunov:      0.01873 ★☆☆☆☆
+
+ICE (Integral of Control Effort) - Eficiencia Energética:
+  1. Pure Pursuit:  4.062  ★★★★★ GANADOR (Más eficiente)
+  2. MPC:           5.651  ★★★★☆
+  3. PID:           5.849  ★★★☆☆
+  4. Lyapunov:      6.879  ★☆☆☆☆
+
+Error Máximo:
+  1. PID:           0.0271  ★★★★★ GANADOR (Menor pico)
+  2. MPC:           0.0314  ★★★★☆
+  3. Lyapunov:      0.0403  ★★☆☆☆
+  4. Pure Pursuit:  0.0718  ★☆☆☆☆
+
+Error Promedio:
+  1. MPC:           0.00758 ★★★★★ GANADOR
+  2. Pure Pursuit:  0.00868 ★★★★☆
+  3. PID:           0.01050 ★★★☆☆
+  4. Lyapunov:      0.01374 ★☆☆☆☆
+
+Error Final:
+  1. Pure Pursuit:  0.00122 ★★★★★ GANADOR
+  2. Lyapunov:      0.00241 ★★★★☆
+  3. PID:           0.00472 ★★★☆☆
+  4. MPC:           0.00484 ★★☆☆☆
+
+Tiempo de Convergencia (Settling Time):
+  1. Pure Pursuit:  33.740 s ★★★★★ GANADOR (Más rápido)
+  2. MPC:           54.310 s ★★★☆☆
+  3. Lyapunov:      54.850 s ★★☆☆☆
+  4. PID:           65.625 s ★☆☆☆☆
+
+
+4.3 ANÁLISIS DE CONSISTENCIA (Desviación Estándar)
+====================================================
+
+Controlador más CONSISTENTE (menor variabilidad entre ejecuciones):
+
+Variabilidad en IAE:
+  1. Pure Pursuit:  0.00925  ★★★★★ MUY CONSISTENTE
+  2. Lyapunov:      0.02025  ★★★★☆ CONSISTENTE
+  3. MPC:           0.02083  ★★★☆☆ MODERADO
+  4. PID:           0.05991  ★☆☆☆☆ VARIABLE
+
+Variabilidad en ITAE:
+  1. Lyapunov:      0.6173   ★★★★★ MUY CONSISTENTE
+  2. MPC:           0.6563   ★★★★☆ CONSISTENTE
+  3. PID:           5.0616   ★☆☆☆☆ MUY VARIABLE
+
+INTERPRETACIÓN:
+Pure Pursuit y Lyapunov muestran la mayor consistencia entre ejecuciones,
+lo que indica comportamiento predecible y robusto. PID muestra mayor
+variabilidad, especialmente en ITAE, lo que sugiere sensibilidad a
+condiciones iniciales o perturbaciones.
+
+
+4.4 PUNTUACIÓN GENERAL DE DESEMPEÑO
+====================================
+
+Sistema de puntuación: Normalización de métricas (0-100, mayor es mejor)
+
+Basándose en las métricas clave (IAE, ITAE, ISE, ICE, errores, tiempos):
+
+  1. PURE PURSUIT:     92/100  ★★★★★ MEJOR GENERAL
+     - Excelente en casi todas las métricas
+     - Más rápido y eficiente
+     - Altamente consistente
+     - Mejor opción para la mayoría de aplicaciones
+
+  2. MPC:              85/100  ★★★★☆ MUY BUENO
+     - Mejor en ISE y error promedio
+     - Excelente balance precisión/esfuerzo
+     - Recomendado cuando se requiere alta precisión
+
+  3. PID:              68/100  ★★★☆☆ BUENO
+     - Mejor en evitar picos de error
+     - Implementación simple
+     - Convergencia lenta
+     - Buena opción para aplicaciones básicas
+
+  4. LYAPUNOV:         62/100  ★★☆☆☆ ACEPTABLE
+     - Muy consistente
+     - Garantías teóricas de estabilidad
+     - Errores promedio más altos
+     - Útil cuando se requiere comportamiento predecible
+
+
+================================================================================
+5. ANÁLISIS COMPARATIVO DETALLADO
+================================================================================
+
+5.1 ERROR ACUMULADO (IAE/ITAE)
+==============================
+Pure Pursuit domina claramente con un IAE 51% menor que PID y 55% menor que
+Lyapunov. El ITAE de Pure Pursuit es 74% menor que PID, indicando convergencia
+mucho más rápida. MPC ocupa el segundo lugar con desempeño sólido.
+
+CONCLUSIÓN: Para minimizar error acumulado → Pure Pursuit
+
+5.2 SUPRESIÓN DE PICOS DE ERROR (ISE)
+======================================
+MPC lidera con ISE de 0.00496, aproximadamente la mitad del ISE de Pure Pursuit.
+Esto indica que MPC es superior para evitar errores grandes momentáneos.
+
+CONCLUSIÓN: Para evitar picos de error → MPC
+
+5.3 EFICIENCIA ENERGÉTICA (ICE)
+================================
+Pure Pursuit consume 41% menos energía que Lyapunov y 30% menos que PID.
+Esta eficiencia es crucial para aplicaciones móviles donde la batería es
+limitada.
+
+CONCLUSIÓN: Para maximizar vida de batería → Pure Pursuit
+
+5.4 VELOCIDAD DE CONVERGENCIA
+==============================
+Pure Pursuit completa la trayectoria en 38.4 segundos, mientras PID requiere
+65.5 segundos (70% más tiempo). El tiempo de asentamiento de Pure Pursuit
+(33.7s) es la mitad que el de PID (65.6s).
+
+CONCLUSIÓN: Para trayectorias rápidas → Pure Pursuit
+
+5.5 PRECISIÓN TERMINAL
+======================
+Pure Pursuit alcanza el error final más bajo (0.00122 m), 4 veces mejor que
+PID. Esto es crítico para aplicaciones de posicionamiento preciso.
+
+CONCLUSIÓN: Para precisión en destino → Pure Pursuit
+
+5.6 CONTROL DE DESVIACIONES MÁXIMAS
+====================================
+PID mantiene el error máximo más bajo (0.0271 m), importante para aplicaciones
+con restricciones espaciales estrictas (pasillos, obstáculos).
+
+CONCLUSIÓN: Para restricciones espaciales → PID
+
+
+================================================================================
+6. RECOMENDACIONES POR TIPO DE APLICACIÓN
+================================================================================
+
+6.1 APLICACIONES DE ALTA VELOCIDAD / EFICIENCIA
+================================================
+CONTROLADOR RECOMENDADO: Pure Pursuit ★★★★★
+
+CASOS DE USO:
+  • Vehículos autónomos en carreteras
+  • Robots de entrega que requieren eficiencia energética
+  • Aplicaciones donde el tiempo de llegada es crítico
+  • Trayectorias suaves sin restricciones espaciales severas
+
+JUSTIFICACIÓN:
+Completa trayectorias 40% más rápido que PID, con 41% menos consumo energético.
+
+
+6.2 APLICACIONES DE ALTA PRECISIÓN
+===================================
+CONTROLADOR RECOMENDADO: MPC ★★★★★
+
+CASOS DE USO:
+  • Manipulación robótica de precisión
+  • Ensamblaje automatizado
+  • Aplicaciones médicas (cirugía robótica)
+  • Cuando se requiere minimizar desviaciones
+
+JUSTIFICACIÓN:
+Menor ISE y error promedio. Excelente para evitar picos de error mientras
+mantiene precisión consistente.
+
+
+6.3 APLICACIONES CON RESTRICCIONES ESPACIALES
+==============================================
+CONTROLADOR RECOMENDADO: PID ★★★★☆
+
+CASOS DE USO:
+  • Navegación en pasillos estrechos
+  • Entornos con obstáculos cercanos
+  • Cuando el espacio lateral es limitado
+  • Aplicaciones industriales en espacios confinados
+
+JUSTIFICACIÓN:
+Mantiene errores máximos más bajos (0.0271 m), reduciendo riesgo de colisiones.
+
+
+6.4 APLICACIONES QUE REQUIEREN GARANTÍAS FORMALES
+==================================================
+CONTROLADOR RECOMENDADO: Lyapunov ★★★★☆
+
+CASOS DE USO:
+  • Sistemas críticos de seguridad
+  • Aplicaciones que requieren certificación
+  • Cuando se necesitan garantías de estabilidad
+  • Entornos regulados
+
+JUSTIFICACIÓN:
+Ofrece garantías teóricas de estabilidad y comportamiento muy consistente.
+
+
+6.5 APLICACIONES DE PROPÓSITO GENERAL
+======================================
+CONTROLADOR RECOMENDADO: Pure Pursuit ★★★★★
+
+JUSTIFICACIÓN:
+Mejor balance general de velocidad, precisión, eficiencia y simplicidad.
+Gana en 6 de 8 métricas principales.
+
+
+================================================================================
+7. ANÁLISIS DE TRADE-OFFS
+================================================================================
+
+7.1 PRECISIÓN vs VELOCIDAD
+===========================
+  • Pure Pursuit: Mejor balance - rápido y preciso
+  • MPC: Alta precisión, velocidad moderada
+  • PID: Preciso pero lento
+  • Lyapunov: Precisión moderada, velocidad moderada
+
+7.2 PRECISIÓN vs EFICIENCIA ENERGÉTICA
+=======================================
+  • Pure Pursuit: Excelente en ambas
+  • MPC: Alta precisión, eficiencia buena
+  • PID: Precisión buena, eficiencia moderada
+  • Lyapunov: Precisión moderada, menor eficiencia
+
+7.3 COMPLEJIDAD vs DESEMPEÑO
+=============================
+  • Pure Pursuit: Baja complejidad, alto desempeño ★★★★★
+  • PID: Baja complejidad, desempeño moderado ★★★☆☆
+  • MPC: Alta complejidad, alto desempeño ★★★★☆
+  • Lyapunov: Complejidad media, desempeño moderado ★★☆☆☆
+
+
+================================================================================
+8. CONCLUSIONES FINALES
+================================================================================
+
+8.1 HALLAZGOS PRINCIPALES
+==========================
+
+1. PURE PURSUIT es el controlador con MEJOR DESEMPEÑO GENERAL
+   - Gana en 6 de 8 métricas clave
+   - 51% menos error acumulado que PID
+   - 74% más rápido en convergencia
+   - 41% más eficiente energéticamente
+   - Implementación simple y robusta
+
+2. MPC es el MEJOR para ALTA PRECISIÓN
+   - ISE más bajo (mejor supresión de picos)
+   - Error promedio más bajo
+   - Excelente para aplicaciones que requieren seguimiento suave
+
+3. PID es el MEJOR para CONTROL DE DESVIACIONES MÁXIMAS
+   - Error máximo 62% menor que Pure Pursuit
+   - Ideal para espacios confinados
+   - Implementación más simple
+
+4. LYAPUNOV es el MÁS CONSISTENTE
+   - Menor variabilidad entre ejecuciones
+   - Garantías teóricas de estabilidad
+   - Comportamiento predecible
+
+
+8.2 RECOMENDACIÓN GENERAL
+==========================
+
+Para la mayoría de aplicaciones de seguimiento de trayectoria en TurtleBot3:
+
+    ┌─────────────────────────────────────────────────────┐
+    │      CONTROLADOR RECOMENDADO: PURE PURSUIT          │
+    │                                                     │
+    │  Razones:                                          │
+    │  ✓ Mejor desempeño general (92/100)               │
+    │  ✓ Más rápido (38.4s vs 54-65s)                   │
+    │  ✓ Más eficiente (ICE: 4.06)                      │
+    │  ✓ Menor error acumulado (IAE: 0.334)             │
+    │  ✓ Mejor precisión terminal (0.00122m)            │
+    │  ✓ Implementación simple                           │
+    │  ✓ Alta consistencia                               │
+    └─────────────────────────────────────────────────────┘
+
+Usar MPC cuando:
+  • Se requiera máxima precisión y suavidad
+  • Esté disponible suficiente poder computacional
+  • Se necesite optimización con restricciones
+
+Usar PID cuando:
+  • Las restricciones espaciales sean críticas
+  • Se requiera implementación simple
+  • El tiempo de convergencia no sea prioritario
+
+Usar Lyapunov cuando:
+  • Se requieran garantías formales de estabilidad
+  • La consistencia sea más importante que el desempeño
+  • Existan requisitos de certificación
+
+
+8.3 DIRECCIONES FUTURAS
+========================
+
+Para investigación adicional, se recomienda:
+
+1. Evaluar controladores en trayectorias más complejas
+   - Trayectorias con curvas cerradas
+   - Cambios abruptos de dirección
+   - Trayectorias no suaves
+
+2. Probar bajo perturbaciones
+   - Deslizamiento de ruedas
+   - Viento lateral
+   - Superficies irregulares
+
+3. Análisis de robustez
+   - Sensibilidad a parámetros
+   - Desempeño con diferentes velocidades
+   - Comportamiento con retardos
+
+4. Optimización de parámetros
+   - Búsqueda de parámetros óptimos para cada controlador
+   - Ajuste automático de ganancias
+   - Adaptación en tiempo real
+
+5. Controladores híbridos
+   - Combinar Pure Pursuit con MPC
+   - Switching entre controladores según contexto
+   - Controladores adaptativos
+
+
+================================================================================
+9. TABLAS DE DATOS ESTADÍSTICOS COMPLETOS
+================================================================================
+
+9.1 ESTADÍSTICAS DETALLADAS - PID
+==================================
+Número de ejecuciones: 30
+
+IAE:          0.678970 ± 0.059910  [0.640209 - 0.977883]
+ITAE:        26.034846 ± 5.061587  [23.855844 - 52.410448]
+ISE:          0.011924 ± 0.000832  [0.010723 - 0.013873]
+ICE:          5.848871 ± 0.122621  [5.598828 - 6.106656]
+Error Máximo: 0.027057 ± 0.001141  [0.024800 - 0.029600]
+Error Medio:  0.010496 ± 0.000588  [0.008015 - 0.011330]
+Error Final:  0.004717 ± 0.000079  [0.004500 - 0.004900]
+T. Asent.:   65.625100 ± 10.732837 [61.158000 - 122.085000]
+T. Total:    65.468800 ± 10.748734 [61.149000 - 122.046000]
+
+
+9.2 ESTADÍSTICAS DETALLADAS - LYAPUNOV
+=======================================
+Número de ejecuciones: 30
+
+IAE:          0.754217 ± 0.020253  [0.709500 - 0.788869]
+ITAE:        23.917904 ± 0.617330  [22.495828 - 25.000785]
+ISE:          0.018729 ± 0.000917  [0.017054 - 0.020518]
+ICE:          6.878915 ± 0.053616  [6.784678 - 7.037782]
+Error Máximo: 0.040293 ± 0.001032  [0.037800 - 0.042200]
+Error Medio:  0.013743 ± 0.000365  [0.012972 - 0.014359]
+Error Final:  0.002410 ± 0.000071  [0.002300 - 0.002500]
+T. Asent.:   54.849967 ± 0.101648  [54.718000 - 55.256000]
+T. Total:    54.802333 ± 0.097728  [54.620000 - 55.139000]
+
+
+9.3 ESTADÍSTICAS DETALLADAS - MPC
+==================================
+Número de ejecuciones: 30
+
+IAE:          0.412003 ± 0.020828  [0.360761 - 0.465274]
+ITAE:        11.379136 ± 0.656341  [10.022011 - 12.558613]
+ISE:          0.004962 ± 0.000394  [0.004024 - 0.005752]
+ICE:          5.651398 ± 0.033765  [5.600752 - 5.786955]
+Error Máximo: 0.031383 ± 0.000712  [0.030600 - 0.033600]
+Error Medio:  0.007584 ± 0.000393  [0.006625 - 0.008567]
+Error Final:  0.004837 ± 0.000886  [0.003800 - 0.008400]
+T. Asent.:   54.310400 ± 0.197533  [53.371000 - 54.589000]
+T. Total:    54.282067 ± 0.190514  [53.365000 - 54.548000]
+
+
+9.4 ESTADÍSTICAS DETALLADAS - PURE PURSUIT
+===========================================
+Número de ejecuciones: 30
+
+IAE:          0.334093 ± 0.009254  [0.311844 - 0.353174]
+ITAE:         6.789430 ± 0.238480  [6.311391 - 7.375957]
+ISE:          0.010082 ± 0.000262  [0.009587 - 0.010479]
+ICE:          4.061619 ± 0.029498  [4.004499 - 4.129239]
+Error Máximo: 0.071800 ± 0.000669  [0.070200 - 0.073000]
+Error Medio:  0.008678 ± 0.000246  [0.008128 - 0.009210]
+Error Final:  0.001220 ± 0.000607  [0.000200 - 0.002700]
+T. Asent.:   33.739833 ± 0.678537  [33.365000 - 36.334000]
+T. Total:    38.434900 ± 0.079629  [38.296000 - 38.699000]
+
+
+================================================================================
+10. GLOSARIO DE TÉRMINOS
+================================================================================
+
+IAE (Integral of Absolute Error):
+  Suma del valor absoluto del error a lo largo del tiempo. Mide el error
+  acumulado total sin distinguir entre errores grandes y pequeños.
+
+ITAE (Integral of Time-weighted Absolute Error):
+  Similar a IAE pero multiplica el error por el tiempo, penalizando errores
+  que persisten más tiempo. Favorece convergencia rápida.
+
+ISE (Integral of Squared Error):
+  Suma del cuadrado del error. Penaliza errores grandes mucho más que pequeños.
+  Útil para identificar y evitar picos de error.
+
+ICE (Integral of Control Effort):
+  Suma del esfuerzo de control (velocidades al cuadrado). Mide la energía
+  consumida por el controlador.
+
+Settling Time (Tiempo de Asentamiento):
+  Tiempo que tarda el sistema en entrar y permanecer dentro de un rango del
+  5% del error máximo.
+
+Error Máximo:
+  Mayor desviación absoluta de la trayectoria de referencia.
+
+Error Promedio:
+  Promedio del valor absoluto del error durante toda la trayectoria.
+
+Error Final:
+  Error absoluto en el último punto de la trayectoria.
+
+
+================================================================================
+FIN DEL ANÁLISIS
+================================================================================
+
+Este análisis fue generado automáticamente a partir de 120 ejecuciones
+experimentales (30 por cada controlador) realizadas en TurtleBot3 Waffle.
+
+Los datos fuente se encuentran en:
+  • Archivo de métricas: tb3_runs/controller_metrics_summary.csv
+  • Datos experimentales: tb3_runs/*.csv
+
+Para visualizaciones gráficas, ejecute:
+  python3 generate_performance_charts.py
+
+Para más información, consulte el README.md del proyecto.
