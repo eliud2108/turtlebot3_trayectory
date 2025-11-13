@@ -108,7 +108,7 @@ def extract_trajectory_and_controller(filename):
         # Remove 'compuesta_' prefix to get controller
         remainder = filename[10:]
     else:
-        trajectory = 'circular'
+        trajectory = 'cuadrada'
         remainder = filename
 
     # Extract controller type
@@ -177,6 +177,49 @@ def analyze_directory(directory_path, output_file='controller_metrics_summary.cs
     print(f"\n✓ Results saved to: {output_path}")
 
     return df_results
+
+
+def print_executive_summary(df_results):
+    """
+    Print a clear executive summary with best controllers for each trajectory.
+
+    Args:
+        df_results (pd.DataFrame): DataFrame with metrics results
+    """
+    print("\n" + "="*80)
+    print("RESUMEN EJECUTIVO - MEJORES CONTROLADORES POR TRAYECTORIA")
+    print("="*80 + "\n")
+
+    trajectories = sorted(df_results['trajectory'].unique())
+    metrics = ['IAE', 'ITAE', 'ISE', 'ICE']
+
+    for trajectory in trajectories:
+        print(f"\n{'─'*80}")
+        print(f"  TRAYECTORIA: {trajectory.upper()}")
+        print(f"{'─'*80}")
+
+        traj_data = df_results[df_results['trajectory'] == trajectory]
+        grouped = traj_data.groupby('controller').mean(numeric_only=True)
+
+        # Create a clean table
+        print(f"\n  {'Controlador':<12} {'IAE':>12} {'ITAE':>12} {'ISE':>12} {'ICE':>12}")
+        print(f"  {'-'*60}")
+
+        for controller in sorted(grouped.index):
+            iae = grouped.loc[controller, 'IAE']
+            itae = grouped.loc[controller, 'ITAE']
+            ise = grouped.loc[controller, 'ISE']
+            ice = grouped.loc[controller, 'ICE']
+            print(f"  {controller.upper():<12} {iae:>12.6f} {itae:>12.6f} {ise:>12.6f} {ice:>12.6f}")
+
+        # Find best for each metric
+        print(f"\n  🏆 MEJORES (valores más bajos):")
+        for metric in metrics:
+            best_controller = grouped[metric].idxmin()
+            best_value = grouped[metric].min()
+            print(f"     {metric:>4}: {best_controller.upper():<10} ({best_value:.6f})")
+
+    print("\n" + "="*80 + "\n")
 
 
 def print_summary_statistics(df_results):
@@ -374,9 +417,23 @@ if __name__ == "__main__":
         df_results = analyze_directory(args.directory, args.output)
 
         if df_results is not None and len(df_results) > 0:
+            # Print executive summary first (most important)
+            print_executive_summary(df_results)
+
+            # Detailed statistics by trajectory
             print_summary_statistics(df_results)
+
+            # Best controller comparisons
             compare_controllers(df_results)
+
+            # Cross-trajectory analysis
             compare_trajectories(df_results)
 
-            print("\nFor detailed results, see the CSV file:")
-            print(f"→ {os.path.join(args.directory, args.output)}")
+            print("\n" + "="*80)
+            print("ARCHIVOS GENERADOS")
+            print("="*80)
+            print(f"\n📊 Resumen detallado: {os.path.join(args.directory, args.output)}")
+            print(f"📁 Total de experimentos analizados: {len(df_results)}")
+            print(f"🎯 Trayectorias: {', '.join(sorted(df_results['trajectory'].unique()))}")
+            print(f"🤖 Controladores: {', '.join(sorted(df_results['controller'].unique()))}")
+            print("\n" + "="*80 + "\n")
