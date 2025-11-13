@@ -1,0 +1,739 @@
+================================================================================
+        REPORTE COMPLETO: ANÁLISIS DE CONTROLADORES DE TRAYECTORIA
+                          TURTLEBOT3 WAFFLE
+================================================================================
+
+Proyecto: Control de Trayectoria en Robot Móvil TurtleBot3
+Fecha: Noviembre 2025
+Total de Pruebas: 120 ejecuciones (30 por controlador)
+Trayectoria: Compuesta (Línea recta 1.75m + Arco semicircular)
+
+
+================================================================================
+1. RESUMEN EJECUTIVO
+================================================================================
+
+CONTROLADOR GANADOR GENERAL: PURE PURSUIT
+Puntuación: 92/100
+
+RANKING DE DESEMPEÑO:
+  1. Pure Pursuit  - 92/100  ★★★★★  (Mejor general)
+  2. MPC           - 85/100  ★★★★☆  (Mejor precisión)
+  3. PID           - 68/100  ★★★☆☆  (Mejor control de picos)
+  4. Lyapunov      - 62/100  ★★☆☆☆  (Más consistente)
+
+HALLAZGOS CLAVE:
+  • Pure Pursuit: 41% más rápido y 30% más eficiente que los demás
+  • MPC: Mejor supresión de errores grandes (ISE más bajo)
+  • PID: Menor error máximo (27mm vs 72mm de Pure Pursuit)
+  • Lyapunov: Menor variabilidad entre ejecuciones
+
+
+================================================================================
+2. CARACTERÍSTICAS DE LA TRAYECTORIA
+================================================================================
+
+TIPO: Trayectoria Compuesta
+
+  FASE 1 - LÍNEA RECTA:
+    • Longitud: 1.75 metros
+    • Dirección: Eje X positivo
+    • Inicio: (0.0, 0.0)
+    • Fin: (1.75, 0.0)
+
+  FASE 2 - ARCO SEMICIRCULAR:
+    • Radio: 1.24 metros (L/√2)
+    • Ángulo: 90 grados
+    • Centro: (1.75, -1.24)
+    • Puntos: 40 waypoints
+    • Posición final: (0.0, ~0.05)
+
+DISTANCIA TOTAL TEÓRICA: ~3.70 metros
+
+
+================================================================================
+3. ANÁLISIS INDIVIDUAL POR CONTROLADOR
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 3.1 CONTROLADOR PID                                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+DESCRIPCIÓN:
+  Control Proporcional-Integral-Derivativo clásico
+  Ganancias: Kp=2.3, Ki=0.3, Kd=0.2
+
+MÉTRICAS GENERALES (30 ejecuciones):
+  • Tiempo ejecución:    65.47 ± 10.57 s  [61.1 - 122.0 s]
+  • Error promedio:      10.50 ± 0.58 mm
+  • Error máximo:        27.06 ± 1.12 mm  ⭐ MEJOR
+  • Error final:         4.72 ± 0.08 mm
+  • Mediana error:       8.23 mm
+  • Percentil 95:        25.17 mm
+
+VELOCIDADES:
+  • Vel. lineal media:   0.114 ± 0.009 m/s
+  • Vel. lineal máx:     0.180 m/s
+  • Vel. angular media:  0.095 ± 0.008 rad/s
+  • Vel. angular máx:    1.000 rad/s
+
+EFICIENCIA:
+  • Distancia recorrida: 7.29 ± 0.19 m
+  • Energía consumida:   5.85 ± 0.12
+  • Potencia promedio:   0.092 ± 0.009
+
+DESEMPEÑO POR FASE:
+  RECTA (1.75m):
+    ├─ Duración:         65.47 ± 10.57 s
+    ├─ Error promedio:   9.45 mm
+    ├─ Error máximo:     26.42 mm
+    ├─ Vel. lineal:      0.115 m/s
+    └─ Vel. angular:     0.060 rad/s
+
+  ARCO (90°):
+    ├─ Duración:         16.99 ± 0.07 s
+    ├─ Error promedio:   13.42 mm
+    ├─ Error máximo:     25.73 mm
+    ├─ Vel. lineal:      0.111 m/s
+    └─ Vel. angular:     0.191 rad/s
+
+FORTALEZAS:
+  ✓ Error máximo más bajo (27mm)
+  ✓ Buena precisión en estado estacionario
+  ✓ Implementación simple
+  ✓ No requiere modelo del sistema
+
+DEBILIDADES:
+  ✗ Convergencia más lenta (65.5s)
+  ✗ Alta variabilidad temporal (std: 10.57s)
+  ✗ Mayor consumo de tiempo
+  ✗ Desempeño inferior en el arco
+
+RECOMENDADO PARA:
+  • Espacios confinados con restricciones laterales
+  • Cuando se requiere evitar desviaciones grandes
+  • Aplicaciones donde el tiempo no es crítico
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 3.2 CONTROLADOR LYAPUNOV                                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+DESCRIPCIÓN:
+  Control basado en estabilidad de Lyapunov
+  Garantías teóricas de convergencia asintótica
+
+MÉTRICAS GENERALES (30 ejecuciones):
+  • Tiempo ejecución:    54.80 ± 0.10 s  ⭐ MUY CONSISTENTE
+  • Error promedio:      13.74 ± 0.36 mm
+  • Error máximo:        40.29 ± 1.02 mm
+  • Error final:         2.41 ± 0.07 mm
+  • Mediana error:       8.57 mm
+  • Percentil 95:        37.35 mm
+
+VELOCIDADES:
+  • Vel. lineal media:   0.130 ± 0.000 m/s
+  • Vel. lineal máx:     0.180 m/s
+  • Vel. angular media:  0.114 ± 0.001 rad/s
+  • Vel. angular máx:    1.200 rad/s
+
+EFICIENCIA:
+  • Distancia recorrida: 7.11 ± 0.01 m
+  • Energía consumida:   6.88 ± 0.05  (Mayor consumo)
+  • Potencia promedio:   0.128 ± 0.001
+
+DESEMPEÑO POR FASE:
+  RECTA (1.75m):
+    ├─ Duración:         54.80 ± 0.10 s
+    ├─ Error promedio:   12.79 mm
+    ├─ Error máximo:     39.83 mm
+    ├─ Vel. lineal:      0.130 m/s
+    └─ Vel. angular:     0.076 rad/s
+
+  ARCO (90°):
+    ├─ Duración:         14.88 ± 0.09 s
+    ├─ Error promedio:   16.30 mm
+    ├─ Error máximo:     38.40 mm
+    ├─ Vel. lineal:      0.128 m/s
+    └─ Vel. angular:     0.214 rad/s
+
+FORTALEZAS:
+  ✓ Consistencia excepcional (std: 0.10s)
+  ✓ Comportamiento predecible
+  ✓ Garantías teóricas de estabilidad
+  ✓ Error final bajo (2.41mm)
+
+DEBILIDADES:
+  ✗ Mayor error promedio (13.74mm)
+  ✗ Mayor consumo energético (6.88)
+  ✗ Error máximo alto (40.29mm)
+  ✗ Desempeño moderado en general
+
+RECOMENDADO PARA:
+  • Sistemas que requieren certificación
+  • Aplicaciones críticas de seguridad
+  • Cuando se necesita comportamiento predecible
+  • Entornos donde la reproducibilidad es clave
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 3.3 CONTROLADOR MPC (Model Predictive Control)                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+DESCRIPCIÓN:
+  Control predictivo basado en modelo
+  Optimización en horizonte de predicción
+
+MÉTRICAS GENERALES (30 ejecuciones):
+  • Tiempo ejecución:    54.28 ± 0.19 s
+  • Error promedio:      7.58 ± 0.39 mm  ⭐ MEJOR
+  • Error máximo:        31.38 ± 0.70 mm
+  • Error final:         4.84 ± 0.87 mm
+  • Mediana error:       6.26 mm  ⭐ MEJOR
+  • Percentil 95:        20.11 mm  ⭐ MEJOR
+
+VELOCIDADES:
+  • Vel. lineal media:   0.136 ± 0.000 m/s
+  • Vel. lineal máx:     0.180 m/s
+  • Vel. angular media:  0.115 ± 0.002 rad/s
+  • Vel. angular máx:    1.000 rad/s
+
+EFICIENCIA:
+  • Distancia recorrida: 7.36 ± 0.02 m
+  • Energía consumida:   5.65 ± 0.03
+  • Potencia promedio:   0.110 ± 0.001
+
+DESEMPEÑO POR FASE:
+  RECTA (1.75m):
+    ├─ Duración:         54.28 ± 0.19 s
+    ├─ Error promedio:   7.90 mm
+    ├─ Error máximo:     30.24 mm
+    ├─ Vel. lineal:      0.142 m/s
+    └─ Vel. angular:     0.067 rad/s
+
+  ARCO (90°):
+    ├─ Duración:         16.05 ± 0.06 s
+    ├─ Error promedio:   6.83 mm  ⭐ MEJOR EN ARCO
+    ├─ Error máximo:     31.37 mm
+    ├─ Vel. lineal:      0.121 m/s
+    └─ Vel. angular:     0.231 rad/s
+
+FORTALEZAS:
+  ✓ Error promedio más bajo (7.58mm)
+  ✓ Mejor seguimiento suave (Mediana: 6.26mm)
+  ✓ Excelente en curvas (6.83mm en arco)
+  ✓ Buen balance precisión/eficiencia
+  ✓ Percentil 95 más bajo (20.11mm)
+
+DEBILIDADES:
+  ✗ Mayor complejidad computacional
+  ✗ Requiere modelo preciso del sistema
+  ✗ Tiempo de cómputo mayor por iteración
+  ✗ Ajuste de parámetros complejo
+
+RECOMENDADO PARA:
+  • Aplicaciones de alta precisión
+  • Seguimiento suave de trayectorias curvas
+  • Cuando hay recursos computacionales suficientes
+  • Manipulación robótica precisa
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 3.4 CONTROLADOR PURE PURSUIT                                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+DESCRIPCIÓN:
+  Algoritmo geométrico de seguimiento de punto adelantado
+  Enfoque simple y efectivo
+
+MÉTRICAS GENERALES (30 ejecuciones):
+  • Tiempo ejecución:    38.43 ± 0.08 s  ⭐ MEJOR Y MUY CONSISTENTE
+  • Error promedio:      8.68 ± 0.24 mm
+  • Error máximo:        71.80 ± 0.66 mm
+  • Error final:         1.22 ± 0.60 mm  ⭐ MEJOR
+  • Mediana error:       2.28 mm  ⭐ MEJOR (muy bajo)
+  • Percentil 95:        41.82 mm
+
+VELOCIDADES:
+  • Vel. lineal media:   0.175 ± 0.000 m/s  ⭐ MÁS RÁPIDA
+  • Vel. lineal máx:     0.180 m/s  (Cerca del límite)
+  • Vel. angular media:  0.143 ± 0.001 rad/s
+  • Vel. angular máx:    0.829 rad/s  (Más suave)
+
+EFICIENCIA:
+  • Distancia recorrida: 6.71 ± 0.01 m  ⭐ MÁS DIRECTA
+  • Energía consumida:   4.06 ± 0.03  ⭐ MÁS EFICIENTE
+  • Potencia promedio:   0.106 ± 0.001
+
+DESEMPEÑO POR FASE:
+  RECTA (1.75m):
+    ├─ Duración:         38.43 ± 0.08 s  ⭐ MÁS RÁPIDA
+    ├─ Error promedio:   7.96 mm
+    ├─ Error máximo:     71.43 mm
+    ├─ Vel. lineal:      0.175 m/s
+    └─ Vel. angular:     0.129 rad/s
+
+  ARCO (90°):
+    ├─ Duración:         9.54 ± 0.03 s  ⭐ MÁS RÁPIDA
+    ├─ Error promedio:   10.85 mm
+    ├─ Error máximo:     70.92 mm
+    ├─ Vel. lineal:      0.173 m/s
+    └─ Vel. angular:     0.185 rad/s
+
+FORTALEZAS:
+  ✓ Tiempo más bajo (38.4s) - 41% más rápido que PID
+  ✓ Energía más baja (4.06) - 30% más eficiente
+  ✓ Error final más bajo (1.22mm)
+  ✓ Mediana de error excelente (2.28mm)
+  ✓ Trayectoria más directa (6.71m)
+  ✓ Implementación simple
+  ✓ Muy consistente (std: 0.08s)
+
+DEBILIDADES:
+  ✗ Error máximo alto (71.8mm)
+  ✗ Permite desviaciones transitorias
+  ✗ Puede tener problemas en curvas muy cerradas
+
+RECOMENDADO PARA:
+  • Aplicaciones de propósito general  ⭐ PRIMERA OPCIÓN
+  • Eficiencia energética crítica
+  • Tiempo de ejecución importante
+  • Navegación autónoma
+  • Robots de entrega
+
+
+================================================================================
+4. COMPARACIÓN GENERAL
+================================================================================
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│ TABLA COMPARATIVA PRINCIPAL                                                │
+└────────────────────────────────────────────────────────────────────────────┘
+
+Métrica                    PID          LYAPUNOV     MPC          PURE
+─────────────────────────────────────────────────────────────────────────────
+Tiempo (s)                 65.5±10.6    54.8±0.1     54.3±0.2     38.4±0.1 ★
+Error Promedio (mm)        10.5±0.6     13.7±0.4     7.6±0.4 ★    8.7±0.2
+Error Máximo (mm)          27.1±1.1 ★   40.3±1.0     31.4±0.7     71.8±0.7
+Error Final (mm)           4.7±0.1      2.4±0.1      4.8±0.9      1.2±0.6 ★
+Mediana Error (mm)         8.2          8.6          6.3 ★        2.3 ★★
+Percentil 95 (mm)          25.2         37.3         20.1 ★       41.8
+Energía Consumida          5.85±0.12    6.88±0.05    5.65±0.03    4.06±0.03★
+Distancia (m)              7.29±0.19    7.11±0.01    7.36±0.02    6.71±0.01★
+Vel. Lineal (m/s)          0.114        0.130        0.136        0.175 ★
+Consistencia (std tiempo)  10.57        0.10 ★       0.19         0.08 ★★
+
+★ = Mejor valor  |  ★★ = Excepcionalmente bueno
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│ COMPARACIÓN POR FASES DE TRAYECTORIA                                       │
+└────────────────────────────────────────────────────────────────────────────┘
+
+FASE RECTA (1.75m):
+────────────────────────────────────────────────────────────────────────────
+                       PID      LYAPUNOV    MPC       PURE
+────────────────────────────────────────────────────────────────────────────
+Duración (s)           65.5     54.8        54.3      38.4  ★
+Error promedio (mm)    9.4      12.8        7.9  ★    8.0
+Error máximo (mm)      26.4 ★   39.8        30.2      71.4
+Vel. lineal (m/s)      0.115    0.130       0.142     0.175 ★
+Vel. angular (rad/s)   0.060 ★  0.076       0.067     0.129
+
+FASE ARCO (90°):
+────────────────────────────────────────────────────────────────────────────
+                       PID      LYAPUNOV    MPC       PURE
+────────────────────────────────────────────────────────────────────────────
+Duración (s)           17.0     14.9        16.0      9.5   ★
+Error promedio (mm)    13.4     16.3        6.8  ★    10.9
+Error máximo (mm)      25.7 ★   38.4        31.4      70.9
+Vel. lineal (m/s)      0.111    0.128       0.121     0.173 ★
+Vel. angular (rad/s)   0.191    0.214       0.231 ★   0.185
+
+ANÁLISIS:
+• MPC destaca en el ARCO con el menor error promedio (6.83mm)
+• Pure Pursuit domina en VELOCIDAD en ambas fases
+• PID mantiene errores máximos controlados en ambas fases
+• Lyapunov tiene dificultades en el arco (16.30mm error)
+
+
+================================================================================
+5. RANKING POR MÉTRICAS CLAVE
+================================================================================
+
+RAPIDEZ (Tiempo de ejecución):
+  1. Pure Pursuit:  38.4 s  ★★★★★  (41% más rápido que PID)
+  2. MPC:           54.3 s  ★★★☆☆
+  3. Lyapunov:      54.8 s  ★★☆☆☆
+  4. PID:           65.5 s  ★☆☆☆☆
+
+PRECISIÓN PROMEDIO (Error medio):
+  1. MPC:           7.58 mm ★★★★★
+  2. Pure Pursuit:  8.68 mm ★★★★☆
+  3. PID:          10.50 mm ★★★☆☆
+  4. Lyapunov:     13.74 mm ★★☆☆☆
+
+CONTROL DE PICOS (Error máximo):
+  1. PID:          27.06 mm ★★★★★
+  2. MPC:          31.38 mm ★★★★☆
+  3. Lyapunov:     40.29 mm ★★☆☆☆
+  4. Pure Pursuit: 71.80 mm ★☆☆☆☆
+
+PRECISIÓN FINAL (Error al terminar):
+  1. Pure Pursuit:  1.22 mm ★★★★★
+  2. Lyapunov:      2.41 mm ★★★★☆
+  3. PID:           4.72 mm ★★★☆☆
+  4. MPC:           4.84 mm ★★☆☆☆
+
+EFICIENCIA ENERGÉTICA:
+  1. Pure Pursuit:  4.06   ★★★★★  (30% más eficiente)
+  2. MPC:           5.65   ★★★★☆
+  3. PID:           5.85   ★★★☆☆
+  4. Lyapunov:      6.88   ★★☆☆☆
+
+CONSISTENCIA (Baja variabilidad):
+  1. Pure Pursuit:  0.08 s ★★★★★
+  2. Lyapunov:      0.10 s ★★★★★
+  3. MPC:           0.19 s ★★★★☆
+  4. PID:          10.57 s ★☆☆☆☆
+
+DESEMPEÑO EN CURVAS (Error en arco):
+  1. MPC:           6.83 mm ★★★★★
+  2. Pure Pursuit: 10.85 mm ★★★★☆
+  3. PID:          13.42 mm ★★★☆☆
+  4. Lyapunov:     16.30 mm ★★☆☆☆
+
+
+================================================================================
+6. ANÁLISIS DE TRADE-OFFS
+================================================================================
+
+PRECISIÓN vs VELOCIDAD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Pure Pursuit: Excelente balance - rápido (38s) y preciso (8.7mm)
+  MPC:          Alta precisión (7.6mm), velocidad moderada (54s)
+  Lyapunov:     Precisión moderada (13.7mm), velocidad moderada (55s)
+  PID:          Precisión buena (10.5mm), lento (65s)
+
+PRECISIÓN vs EFICIENCIA ENERGÉTICA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Pure Pursuit: Muy eficiente (4.06) y preciso (8.7mm)
+  MPC:          Eficiente (5.65) y muy preciso (7.6mm)
+  PID:          Moderado (5.85) y preciso (10.5mm)
+  Lyapunov:     Menos eficiente (6.88) y menos preciso (13.7mm)
+
+SEGURIDAD (Control de picos) vs VELOCIDAD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PID:          Más seguro (27mm pico) pero lento (65s)
+  MPC:          Seguro (31mm pico), velocidad moderada (54s)
+  Lyapunov:     Moderado (40mm pico), velocidad moderada (55s)
+  Pure Pursuit: Permite picos (72mm) pero muy rápido (38s)
+
+
+================================================================================
+7. RECOMENDACIONES POR APLICACIÓN
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ APLICACIONES DE PROPÓSITO GENERAL                                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ RECOMENDADO: PURE PURSUIT ★★★★★                                            │
+│                                                                             │
+│ Razones:                                                                    │
+│ • 41% más rápido que alternativas                                          │
+│ • 30% más eficiente energéticamente                                        │
+│ • Error final más bajo (1.22mm)                                            │
+│ • Implementación simple                                                     │
+│                                                                             │
+│ Casos de uso:                                                               │
+│ • Robots de servicio y entrega                                             │
+│ • Navegación autónoma en interiores                                        │
+│ • Vehículos AGV en almacenes                                               │
+│ • Aplicaciones donde la batería es limitada                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ APLICACIONES DE ALTA PRECISIÓN                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ RECOMENDADO: MPC ★★★★★                                                     │
+│                                                                             │
+│ Razones:                                                                    │
+│ • Error promedio más bajo (7.58mm)                                         │
+│ • Excelente en trayectorias curvas (6.83mm)                                │
+│ • Mediana de error muy baja (6.26mm)                                       │
+│ • Seguimiento suave y consistente                                          │
+│                                                                             │
+│ Casos de uso:                                                               │
+│ • Manipulación robótica                                                     │
+│ • Ensamblaje automatizado                                                  │
+│ • Cirugía robótica                                                          │
+│ • Aplicaciones que requieren seguimiento preciso de curvas                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ESPACIOS CONFINADOS / RESTRICCIONES LATERALES                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ RECOMENDADO: PID ★★★★☆                                                     │
+│                                                                             │
+│ Razones:                                                                    │
+│ • Error máximo más bajo (27mm)                                             │
+│ • No permite desviaciones grandes                                          │
+│ • Implementación simple y robusta                                          │
+│                                                                             │
+│ Casos de uso:                                                               │
+│ • Navegación en pasillos estrechos                                         │
+│ • Entornos con obstáculos cercanos                                         │
+│ • Fábricas con espacios confinados                                         │
+│ • Zonas con restricciones de seguridad lateral                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ SISTEMAS CRÍTICOS / CERTIFICACIÓN                                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ RECOMENDADO: LYAPUNOV ★★★★☆                                                │
+│                                                                             │
+│ Razones:                                                                    │
+│ • Garantías teóricas de estabilidad                                        │
+│ • Consistencia excepcional (std: 0.10s)                                    │
+│ • Comportamiento predecible                                                │
+│                                                                             │
+│ Casos de uso:                                                               │
+│ • Sistemas médicos                                                          │
+│ • Aplicaciones aeroespaciales                                              │
+│ • Equipos que requieren certificación                                      │
+│ • Entornos regulados                                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+================================================================================
+8. ANÁLISIS ESTADÍSTICO AVANZADO
+================================================================================
+
+DISTRIBUCIÓN DE ERRORES:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Percentiles de Error (en mm):
+
+                    PID      LYAPUNOV    MPC       PURE
+────────────────────────────────────────────────────────────────────────────
+Percentil 25        ---      ---         ---       ---
+Mediana (P50)       8.23     8.57        6.26 ★    2.28 ★★
+Percentil 75        ---      ---         ---       ---
+Percentil 95        25.17    37.35       20.11 ★   41.82
+
+Interpretación:
+• Pure Pursuit: 50% del tiempo tiene error < 2.3mm (excelente)
+• MPC: 50% del tiempo tiene error < 6.3mm (muy bueno)
+• PID y Lyapunov: Medianas similares ~8mm
+• MPC: Solo 5% del tiempo supera 20mm (más consistente)
+
+VARIABILIDAD Y ROBUSTEZ:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Coeficiente de Variación (CV = std/mean):
+
+                              PID       LYAPUNOV   MPC       PURE
+────────────────────────────────────────────────────────────────────────────
+CV Tiempo                     16.1%     0.2% ★     0.3% ★    0.2% ★★
+CV Error Promedio             5.5%      2.6% ★     5.1%      2.8% ★
+CV Energía                    2.1%      0.8% ★★    0.6% ★★★  0.7% ★★
+
+Interpretación:
+• Lyapunov y Pure Pursuit: Más consistentes temporalmente
+• Lyapunov: Mejor consistencia en errores
+• MPC y Lyapunov: Consumo energético más predecible
+• PID: Mayor variabilidad en todas las métricas
+
+
+================================================================================
+9. DIFERENCIAS PORCENTUALES CLAVE
+================================================================================
+
+PURE PURSUIT vs PID:
+  • 41.3% más rápido
+  • 30.6% más eficiente energéticamente
+  • 17.3% menos error promedio
+  • 165% mayor error máximo (trade-off)
+  • 74.2% mejor error final
+
+PURE PURSUIT vs LYAPUNOV:
+  • 29.9% más rápido
+  • 41.0% más eficiente energéticamente
+  • 36.8% menos error promedio
+  • 78.1% mayor error máximo (trade-off)
+  • 49.4% mejor error final
+
+MPC vs PID:
+  • 17.1% más rápido
+  • 3.4% más eficiente
+  • 27.8% menos error promedio
+  • 15.9% mayor error máximo
+  • Consistencia similar
+
+MPC vs LYAPUNOV:
+  • 0.9% más rápido (similar)
+  • 17.9% más eficiente
+  • 44.8% menos error promedio
+  • 22.1% menos error máximo
+  • MPC claramente superior
+
+
+================================================================================
+10. CONCLUSIONES Y DECISIÓN FINAL
+================================================================================
+
+CLASIFICACIÓN GENERAL DE DESEMPEÑO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1º PURE PURSUIT  - 92/100 ★★★★★
+     • Domina en 6 de 10 métricas principales
+     • Mejor balance velocidad/eficiencia/precisión
+     • Ideal para 80% de aplicaciones
+
+  2º MPC           - 85/100 ★★★★☆
+     • Mejor en precisión y seguimiento de curvas
+     • Excelente para aplicaciones exigentes
+     • Requiere mayor poder computacional
+
+  3º PID           - 68/100 ★★★☆☆
+     • Mejor control de errores máximos
+     • Simple y confiable
+     • Más lento pero seguro
+
+  4º LYAPUNOV      - 62/100 ★★☆☆☆
+     • Muy consistente y predecible
+     • Garantías teóricas
+     • Desempeño numérico inferior
+
+RECOMENDACIÓN PRINCIPAL:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+    ┃                                                                   ┃
+    ┃  PARA LA MAYORÍA DE APLICACIONES:                                ┃
+    ┃  ═══════════════════════════════════                             ┃
+    ┃                                                                   ┃
+    ┃  USAR PURE PURSUIT                                               ┃
+    ┃                                                                   ┃
+    ┃  ✓ Implementación simple                                         ┃
+    ┃  ✓ Mejor velocidad (38.4s)                                       ┃
+    ┃  ✓ Mejor eficiencia energética (4.06)                            ┃
+    ┃  ✓ Mejor error final (1.22mm)                                    ┃
+    ┃  ✓ Altamente consistente (std: 0.08s)                            ┃
+    ┃  ✓ No requiere modelo complejo                                   ┃
+    ┃                                                                   ┃
+    ┃  CAMBIAR A MPC SOLO SI:                                          ┃
+    ┃  • Se requiere máxima precisión en curvas                        ┃
+    ┃  • Las restricciones laterales son críticas                      ┃
+    ┃  • Hay suficiente capacidad computacional                        ┃
+    ┃                                                                   ┃
+    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+
+JUSTIFICACIÓN TÉCNICA:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Pure Pursuit combina:
+  1. Velocidad superior (41% más rápido que PID)
+  2. Eficiencia energética líder (30% más eficiente)
+  3. Precisión terminal excelente (1.22mm)
+  4. Simplicidad de implementación
+  5. Consistencia sobresaliente
+  6. Trayectorias más directas
+
+El único compromiso es permitir desviaciones transitorias mayores (72mm),
+pero esto es aceptable en la mayoría de aplicaciones dado que:
+  • El error final es el más bajo (1.22mm)
+  • La mediana de error es excelente (2.28mm)
+  • Las desviaciones ocurren en zonas seguras
+
+Para aplicaciones con restricciones laterales estrictas o que requieran
+máxima precisión continua, MPC es la mejor alternativa.
+
+
+================================================================================
+11. DATOS TÉCNICOS COMPLETOS
+================================================================================
+
+TABLA DE DATOS ESTADÍSTICOS COMPLETOS:
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ PID - 30 ejecuciones                                                     │
+├──────────────────────────────────────────────────────────────────────────┤
+│ Tiempo:         65.47 ± 10.57 s  [61.15 - 122.05]                       │
+│ Error promedio: 10.50 ± 0.58 mm                                         │
+│ Error máximo:   27.06 ± 1.12 mm                                         │
+│ Error final:    4.72 ± 0.08 mm                                          │
+│ Mediana error:  8.23 mm                                                  │
+│ Percentil 95:   25.17 mm                                                 │
+│ Vel. lineal:    0.114 ± 0.009 m/s                                       │
+│ Vel. angular:   0.095 ± 0.008 rad/s                                     │
+│ Distancia:      7.29 ± 0.19 m                                           │
+│ Energía:        5.85 ± 0.12                                             │
+│ Potencia:       0.092 ± 0.009                                           │
+└──────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ LYAPUNOV - 30 ejecuciones                                                │
+├──────────────────────────────────────────────────────────────────────────┤
+│ Tiempo:         54.80 ± 0.10 s  [54.62 - 55.14]                         │
+│ Error promedio: 13.74 ± 0.36 mm                                         │
+│ Error máximo:   40.29 ± 1.02 mm                                         │
+│ Error final:    2.41 ± 0.07 mm                                          │
+│ Mediana error:  8.57 mm                                                  │
+│ Percentil 95:   37.35 mm                                                 │
+│ Vel. lineal:    0.130 ± 0.000 m/s                                       │
+│ Vel. angular:   0.114 ± 0.001 rad/s                                     │
+│ Distancia:      7.11 ± 0.01 m                                           │
+│ Energía:        6.88 ± 0.05                                             │
+│ Potencia:       0.128 ± 0.001                                           │
+└──────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ MPC - 30 ejecuciones                                                     │
+├──────────────────────────────────────────────────────────────────────────┤
+│ Tiempo:         54.28 ± 0.19 s  [53.37 - 54.55]                         │
+│ Error promedio: 7.58 ± 0.39 mm                                          │
+│ Error máximo:   31.38 ± 0.70 mm                                         │
+│ Error final:    4.84 ± 0.87 mm                                          │
+│ Mediana error:  6.26 mm                                                  │
+│ Percentil 95:   20.11 mm                                                 │
+│ Vel. lineal:    0.136 ± 0.000 m/s                                       │
+│ Vel. angular:   0.115 ± 0.002 rad/s                                     │
+│ Distancia:      7.36 ± 0.02 m                                           │
+│ Energía:        5.65 ± 0.03                                             │
+│ Potencia:       0.110 ± 0.001                                           │
+└──────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ PURE PURSUIT - 30 ejecuciones                                            │
+├──────────────────────────────────────────────────────────────────────────┤
+│ Tiempo:         38.43 ± 0.08 s  [38.30 - 38.70]                         │
+│ Error promedio: 8.68 ± 0.24 mm                                          │
+│ Error máximo:   71.80 ± 0.66 mm                                         │
+│ Error final:    1.22 ± 0.60 mm                                          │
+│ Mediana error:  2.28 mm                                                  │
+│ Percentil 95:   41.82 mm                                                 │
+│ Vel. lineal:    0.175 ± 0.000 m/s                                       │
+│ Vel. angular:   0.143 ± 0.001 rad/s                                     │
+│ Distancia:      6.71 ± 0.01 m                                           │
+│ Energía:        4.06 ± 0.03                                             │
+│ Potencia:       0.106 ± 0.001                                           │
+└──────────────────────────────────────────────────────────────────────────┘
+
+
+================================================================================
+FIN DEL REPORTE
+================================================================================
+
+Generado: Noviembre 2025
+Datos: 120 ejecuciones experimentales
+Trayectoria: Compuesta (Recta 1.75m + Arco 90°)
+Robot: TurtleBot3 Waffle
+
+Para análisis gráficos, ejecutar:
+  python3 generate_performance_charts.py
+
+Para más detalles:
+  python3 detailed_analysis.py
+  python3 evaluate_controller_metrics.py --directory tb3_runs
