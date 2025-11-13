@@ -28,18 +28,20 @@ class PurePursuitControllerReal(Node):
         
         self.csv_path = os.path.join(self.results_dir, f'compuesta_pure_{self.timestamp}.csv')
         
-        # Waypoints para trayectoria compuesta: línea recta + cuarto de círculo
+        # Waypoints para trayectoria compuesta: línea recta + cuarto de círculo (radio = 1.75 m)
         L = 1.75
-        r = L / math.sqrt(2)
+        radio = L  # ¡Radio correcto = 1.75 m!
         center_x = L
-        center_y = -r
+        center_y = -L
         self.waypoints = [[0.0, 0.0], [L, 0.0]]  # Línea recta inicial
         num_arc_points = 40
         for i in range(1, num_arc_points + 1):
             angle = math.pi / 2 - (math.pi / 2) * (i / num_arc_points)
-            wx = center_x + r * math.cos(angle)
-            wy = center_y + r * math.sin(angle)
+            wx = center_x + radio * math.cos(angle)
+            wy = center_y + radio * math.sin(angle)
             self.waypoints.append([wx, wy])
+        # Añadir punto final exacto del arco: (2*L, -L)
+        self.waypoints.append([2 * L, -L])
         
         # Guardar trayectoria de referencia con interpolación fina
         self.ref_path = self._build_reference_path(self.waypoints, points_per_edge=80)  # Aumentar puntos por segmento
@@ -48,7 +50,7 @@ class PurePursuitControllerReal(Node):
         self.lookahead_distance = 0.40  # Distancia de lookahead para Waffle
         self.linear_velocity = 0.18     # Velocidad lineal constante
         self.max_angular = 1.0          # Velocidad angular máxima
-        self.goal_threshold = 0.06      # Umbral para considerar objetivo alcanzado
+        self.goal_threshold = 0.03      # Umbral para considerar objetivo alcanzado
         self.wheelbase = 0.287          # Distancia entre ejes del Waffle
         
         # Estado
@@ -212,58 +214,56 @@ class PurePursuitControllerReal(Node):
     def find_lookahead_point(self, robot_x, robot_y):
         """Encontrar punto de lookahead en la trayectoria"""
         lookahead_point = None
-        lookahead_idx = self.current_target_idx
         
-        # Asegurar que el primer segmento (línea recta) se respete
-        first_segment_end = self.waypoints[1]  # [L, 0.0]
-        dist_to_first_end = math.sqrt((first_segment_end[0] - robot_x)**2 + (first_segment_end[1] - robot_y)**2)
+        # Primero, actualizar el índice actual basándose en proximidad
+        while self.current_target_idx < len(self.waypoints):
+            wp = self.waypoints[self.current_target_idx]
+            dist = math.sqrt((wp[0] - robot_x)**2 + (wp[1] - robot_y)**2)
+            if dist < self.goal_threshold * 2:  # Usar un umbral más grande para avanzar
+                self.current_target_idx += 1
+            else:
+                break
         
-        # Si estamos en el primer segmento (antes de la curva), limitar el lookahead al segmento recto
-        if self.current_target_idx <= 1 and dist_to_first_end > self.lookahead_distance:
-            # Proyectar el punto de lookahead en la línea recta [0,0] -> [L,0]
-            t = min(self.lookahead_distance / max(1e-6, first_segment_end[0]), 1.0)
-            lookahead_point = [t * first_segment_end[0], 0.0]
-            lookahead_idx = self.current_target_idx
-        else:
-            # Buscar punto que esté a la distancia de lookahead
-            for i in range(self.current_target_idx, len(self.waypoints)):
-                wp = self.waypoints[i]
-                dist = math.sqrt((wp[0] - robot_x)**2 + (wp[1] - robot_y)**2)
-                
-                if dist >= self.lookahead_distance:
-                    if i == 0:
-                        lookahead_point = wp
-                        lookahead_idx = i
-                    else:
-                        # Interpolar entre waypoints
-                        prev_wp = self.waypoints[i-1]
-                        prev_dist = math.sqrt((prev_wp[0] - robot_x)**2 + 
-                                             (prev_wp[1] - robot_y)**2)
-                        
-                        if dist > prev_dist:
-                            t = (self.lookahead_distance - prev_dist) / (dist - prev_dist)
-                            t = np.clip(t, 0, 1)
-                            
-                            lookahead_point = [
-                                prev_wp[0] + t * (wp[0] - prev_wp[0]),
-                                prev_wp[1] + t * (wp[1] - prev_wp[1])
-                            ]
-                        else:
-                            lookahead_point = wp
-                        lookahead_idx = i
-                    break
+        # Si llegamos al final, retornar el último punto
+        if self.current_target_idx >= len(self.waypoints):
+            return self.waypoints[-1] if self.waypoints else None
         
-        # Si no encontramos punto, usar el último waypoint
-        if lookahead_point is None and len(self.waypoints) > 0:
-            lookahead_point = self.waypoints[-1]
-            lookahead_idx = len(self.waypoints) - 1
-        
-        # Actualizar índice actual
-        for i in range(self.current_target_idx, min(lookahead_idx + 1, len(self.waypoints))):
+        # Buscar punto de lookahead desde el índice actual
+        for i in range(self.current_target_idx, len(self.waypoints)):
             wp = self.waypoints[i]
             dist = math.sqrt((wp[0] - robot_x)**2 + (wp[1] - robot_y)**2)
-            if dist < self.goal_threshold:
-                self.current_target_idx = i + 1
+            
+            if dist >= self.lookahead_distance:
+                if i == self.current_target_idx:
+                    # Si el primer punto ya está a la distancia de lookahead, usarlo
+                    lookahead_point = wp
+                else:
+                    # Interpolar entre waypoints
+                    prev_wp = self.waypoints[i-1]
+                    prev_dist = math.sqrt((prev_wp[0] - robot_x)**2 + 
+                                         (prev_wp[1] - robot_y)**2)
+                    
+                    # Solo interpolar si hay una progresión válida
+                    if dist > prev_dist and dist - prev_dist > 0.001:
+                        t = (self.lookahead_distance - prev_dist) / (dist - prev_dist)
+                        t = np.clip(t, 0, 1)
+                        
+                        lookahead_point = [
+                            prev_wp[0] + t * (wp[0] - prev_wp[0]),
+                            prev_wp[1] + t * (wp[1] - prev_wp[1])
+                        ]
+                    else:
+                        lookahead_point = wp
+                break
+        
+        # Si no encontramos punto (todos están muy cerca), usar el siguiente disponible
+        if lookahead_point is None:
+            if self.current_target_idx < len(self.waypoints):
+                # Usar un punto más adelante para asegurar progreso
+                idx = min(self.current_target_idx + 5, len(self.waypoints) - 1)
+                lookahead_point = self.waypoints[idx]
+            else:
+                lookahead_point = self.waypoints[-1]
         
         return lookahead_point
     

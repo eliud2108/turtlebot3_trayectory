@@ -8,7 +8,7 @@ Metrics calculated:
 - ISE: Integral of Squared Error
 - ICE: Integral of Control Effort
 
-Author: Claude AI
+
 Date: 2025-11-05
 """
 
