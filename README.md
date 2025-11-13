@@ -48,12 +48,34 @@ Las gráficas generadas incluyen:
    - `controller_comparison_summary.png`: Comparación de todos los controladores con métricas IAE, ITAE, ISE, ICE, errores promedio y máximo, y puntuación general de desempeño
    - `controller_statistics_table.png`: Tabla estadística detallada con medias y desviaciones estándar para cada controlador
 
-2. **Gráficas Individuales** (para cada corrida de controlador):
+2. **Gráficas Individuales por Trayectoria** (ejemplos representativos):
+
+   Cada gráfica muestra para una corrida específica:
    - Seguimiento de trayectoria (referencia vs real)
    - Error de seguimiento en el tiempo
    - Velocidad lineal (v) y angular (w)
    - Componentes de posición X e Y
    - Esfuerzo de control total
+
+   **Trayectoria Recta** (4 gráficas):
+   - `recta_PID_*_performance.png` - Ejemplo PID en línea recta
+   - `recta_lyapunov_*_performance.png` - Ejemplo Lyapunov en línea recta
+   - `recta_mpc_*_performance.png` - Ejemplo MPC en línea recta
+   - `recta_pure_*_performance.png` - Ejemplo Pure Pursuit en línea recta
+
+   **Trayectoria Compuesta** (4 gráficas):
+   - `compuesta_pid_*_performance.png` - Ejemplo PID en trayectoria compuesta
+   - `compuesta_lyapunov_*_performance.png` - Ejemplo Lyapunov en trayectoria compuesta
+   - `compuesta_mpc_*_performance.png` - Ejemplo MPC en trayectoria compuesta
+   - `compuesta_pure_*_performance.png` - Ejemplo Pure Pursuit en trayectoria compuesta
+
+   **Trayectoria Cuadrada** (4 gráficas):
+   - `cuadrada_pid_*_performance.png` - Ejemplo PID en trayectoria cuadrada
+   - `cuadrada_lyapunov_*_performance.png` - Ejemplo Lyapunov en trayectoria cuadrada
+   - `cuadrada_mpc_*_performance.png` - Ejemplo MPC en trayectoria cuadrada
+   - `cuadrada_pure_*_performance.png` - Ejemplo Pure Pursuit en trayectoria cuadrada
+
+   Total: **12 gráficas individuales** (1 por cada combinación controlador × trayectoria)
 
 #### Análisis por Tipo de Trayectoria
 
