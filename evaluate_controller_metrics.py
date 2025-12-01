@@ -86,6 +86,47 @@ def calculate_metrics(csv_file):
     }
 
 
+def extract_trajectory_and_controller(filename):
+    """
+    Extract trajectory type and controller type from filename.
+
+    Args:
+        filename (str): Name of the CSV file
+
+    Returns:
+        tuple: (trajectory_type, controller_type)
+    """
+    filename_lower = filename.lower()
+
+    # Determine trajectory type
+    if filename.startswith('recta_'):
+        trajectory = 'recta'
+        # Remove 'recta_' prefix to get controller
+        remainder = filename[6:]
+    elif filename.startswith('compuesta_'):
+        trajectory = 'compuesta'
+        # Remove 'compuesta_' prefix to get controller
+        remainder = filename[10:]
+    else:
+        trajectory = 'cuadrada'
+        remainder = filename
+
+    # Extract controller type
+    # Handle different naming patterns
+    if remainder.startswith('pid') or remainder.startswith('PID'):
+        controller = 'pid'
+    elif remainder.startswith('mpc') or remainder.startswith('MPC'):
+        controller = 'mpc'
+    elif remainder.startswith('lyapunov'):
+        controller = 'lyapunov'
+    elif remainder.startswith('pure'):
+        controller = 'pure'
+    else:
+        controller = 'unknown'
+
+    return trajectory, controller
+
+
 def analyze_directory(directory_path, output_file='controller_metrics_summary.csv'):
     """
     Analyze all CSV files in a directory and generate summary report.
@@ -94,8 +135,9 @@ def analyze_directory(directory_path, output_file='controller_metrics_summary.cs
         directory_path (str): Path to directory containing CSV files
         output_file (str): Name of output CSV file for summary
     """
-    # Find all CSV files
+    # Find all CSV files (exclude summary files)
     csv_files = glob.glob(os.path.join(directory_path, '*.csv'))
+    csv_files = [f for f in csv_files if 'summary' not in os.path.basename(f).lower()]
 
     if not csv_files:
         print(f"No CSV files found in {directory_path}")
@@ -109,21 +151,22 @@ def analyze_directory(directory_path, output_file='controller_metrics_summary.cs
     for csv_file in sorted(csv_files):
         try:
             metrics = calculate_metrics(csv_file)
+
+            # Extract trajectory and controller type
+            trajectory, controller = extract_trajectory_and_controller(metrics['file'])
+            metrics['trajectory'] = trajectory
+            metrics['controller'] = controller
+
             results.append(metrics)
-            print(f"Processed: {metrics['file']}")
+            print(f"Processed: {metrics['file']} (trajectory: {trajectory}, controller: {controller})")
         except Exception as e:
             print(f"Error processing {csv_file}: {e}")
 
     # Create DataFrame with results
     df_results = pd.DataFrame(results)
 
-    # Extract controller type from filename
-    df_results['controller'] = df_results['file'].apply(
-        lambda x: x.split('_')[0] if '_' in x else 'unknown'
-    )
-
     # Reorder columns
-    cols = ['file', 'controller', 'IAE', 'ITAE', 'ISE', 'ICE',
+    cols = ['file', 'trajectory', 'controller', 'IAE', 'ITAE', 'ISE', 'ICE',
             'max_error', 'mean_error', 'final_error', 'settling_time',
             'total_time', 'num_samples']
     df_results = df_results[cols]
@@ -136,68 +179,192 @@ def analyze_directory(directory_path, output_file='controller_metrics_summary.cs
     return df_results
 
 
-def print_summary_statistics(df_results):
+def print_executive_summary(df_results):
     """
-    Print summary statistics grouped by controller type.
+    Print a clear executive summary with best controllers for each trajectory.
 
     Args:
         df_results (pd.DataFrame): DataFrame with metrics results
     """
     print("\n" + "="*80)
-    print("SUMMARY STATISTICS BY CONTROLLER TYPE")
-    print("="*80)
+    print("RESUMEN EJECUTIVO - MEJORES CONTROLADORES POR TRAYECTORIA")
+    print("="*80 + "\n")
 
-    # Group by controller type
-    grouped = df_results.groupby('controller')
+    trajectories = sorted(df_results['trajectory'].unique())
+    metrics = ['IAE', 'ITAE', 'ISE', 'ICE']
 
+    for trajectory in trajectories:
+        print(f"\n{'─'*80}")
+        print(f"  TRAYECTORIA: {trajectory.upper()}")
+        print(f"{'─'*80}")
+
+        traj_data = df_results[df_results['trajectory'] == trajectory]
+        grouped = traj_data.groupby('controller').mean(numeric_only=True)
+
+        # Create a clean table
+        print(f"\n  {'Controlador':<12} {'IAE':>12} {'ITAE':>12} {'ISE':>12} {'ICE':>12}")
+        print(f"  {'-'*60}")
+
+        for controller in sorted(grouped.index):
+            iae = grouped.loc[controller, 'IAE']
+            itae = grouped.loc[controller, 'ITAE']
+            ise = grouped.loc[controller, 'ISE']
+            ice = grouped.loc[controller, 'ICE']
+            print(f"  {controller.upper():<12} {iae:>12.6f} {itae:>12.6f} {ise:>12.6f} {ice:>12.6f}")
+
+        # Find best for each metric
+        print(f"\n  🏆 MEJORES (valores más bajos):")
+        for metric in metrics:
+            best_controller = grouped[metric].idxmin()
+            best_value = grouped[metric].min()
+            print(f"     {metric:>4}: {best_controller.upper():<10} ({best_value:.6f})")
+
+    print("\n" + "="*80 + "\n")
+
+
+def print_summary_statistics(df_results):
+    """
+    Print summary statistics grouped by trajectory and controller type.
+
+    Args:
+        df_results (pd.DataFrame): DataFrame with metrics results
+    """
     metrics_to_summarize = ['IAE', 'ITAE', 'ISE', 'ICE',
                             'max_error', 'mean_error', 'final_error']
 
-    for controller, group in grouped:
-        print(f"\n{controller.upper()} Controller ({len(group)} runs)")
-        print("-" * 80)
+    # Get unique trajectories
+    trajectories = sorted(df_results['trajectory'].unique())
 
-        for metric in metrics_to_summarize:
-            if metric in group.columns:
-                mean_val = group[metric].mean()
-                std_val = group[metric].std()
-                min_val = group[metric].min()
-                max_val = group[metric].max()
+    for trajectory in trajectories:
+        print("\n" + "="*80)
+        print(f"TRAJECTORY: {trajectory.upper()}")
+        print("="*80)
 
-                print(f"{metric:15s}: Mean={mean_val:10.6f} ± {std_val:10.6f} "
-                      f"(Min={min_val:10.6f}, Max={max_val:10.6f})")
+        # Filter data for this trajectory
+        traj_data = df_results[df_results['trajectory'] == trajectory]
 
-    print("\n" + "="*80)
-    print("OVERALL COMPARISON (Mean values)")
-    print("="*80)
+        # Group by controller type
+        grouped = traj_data.groupby('controller')
 
-    summary = grouped[metrics_to_summarize].mean(numeric_only=True)
-    print(summary.to_string())
-    print("\n")
+        for controller, group in grouped:
+            print(f"\n{controller.upper()} Controller ({len(group)} runs)")
+            print("-" * 80)
+
+            for metric in metrics_to_summarize:
+                if metric in group.columns:
+                    mean_val = group[metric].mean()
+                    std_val = group[metric].std()
+                    min_val = group[metric].min()
+                    max_val = group[metric].max()
+
+                    print(f"{metric:15s}: Mean={mean_val:10.6f} ± {std_val:10.6f} "
+                          f"(Min={min_val:10.6f}, Max={max_val:10.6f})")
+
+        print("\n" + "-"*80)
+        print(f"COMPARISON FOR {trajectory.upper()} TRAJECTORY (Mean values)")
+        print("-"*80)
+
+        summary = grouped[metrics_to_summarize].mean(numeric_only=True)
+        print(summary.to_string())
+        print("\n")
 
 
 def compare_controllers(df_results):
     """
-    Generate a comparison table showing which controller performs best for each metric.
+    Generate a comparison table showing which controller performs best for each metric,
+    separated by trajectory type.
+
+    Args:
+        df_results (pd.DataFrame): DataFrame with metrics results
+    """
+    metrics_to_compare = ['IAE', 'ITAE', 'ISE', 'ICE',
+                          'max_error', 'mean_error', 'final_error']
+
+    # Get unique trajectories
+    trajectories = sorted(df_results['trajectory'].unique())
+
+    for trajectory in trajectories:
+        print("\n" + "="*80)
+        print(f"BEST CONTROLLER FOR EACH METRIC - {trajectory.upper()} TRAJECTORY")
+        print("(Lower is better)")
+        print("="*80 + "\n")
+
+        # Filter data for this trajectory
+        traj_data = df_results[df_results['trajectory'] == trajectory]
+
+        # Group by controller and calculate mean (only numeric columns)
+        grouped = traj_data.groupby('controller').mean(numeric_only=True)
+
+        for metric in metrics_to_compare:
+            if metric in grouped.columns:
+                best_controller = grouped[metric].idxmin()
+                best_value = grouped[metric].min()
+                worst_controller = grouped[metric].idxmax()
+                worst_value = grouped[metric].max()
+                print(f"{metric:15s}: Best={best_controller:10s} ({best_value:8.6f})  "
+                      f"Worst={worst_controller:10s} ({worst_value:8.6f})")
+
+        print("\n")
+
+
+def compare_trajectories(df_results):
+    """
+    Compare performance across different trajectory types for each controller.
 
     Args:
         df_results (pd.DataFrame): DataFrame with metrics results
     """
     print("\n" + "="*80)
-    print("BEST CONTROLLER FOR EACH METRIC (Lower is better)")
+    print("TRAJECTORY COMPARISON BY CONTROLLER")
+    print("(Mean values - Lower is better for all metrics)")
     print("="*80 + "\n")
-
-    # Group by controller and calculate mean (only numeric columns)
-    grouped = df_results.groupby('controller').mean(numeric_only=True)
 
     metrics_to_compare = ['IAE', 'ITAE', 'ISE', 'ICE',
                           'max_error', 'mean_error', 'final_error']
 
+    # Get unique controllers and trajectories
+    controllers = sorted(df_results['controller'].unique())
+    trajectories = sorted(df_results['trajectory'].unique())
+
+    for controller in controllers:
+        print(f"\n{controller.upper()} Controller")
+        print("-" * 80)
+
+        # Filter data for this controller
+        controller_data = df_results[df_results['controller'] == controller]
+
+        # Group by trajectory
+        grouped = controller_data.groupby('trajectory').mean(numeric_only=True)
+
+        for metric in metrics_to_compare:
+            if metric in grouped.columns:
+                print(f"\n{metric:15s}:")
+                for trajectory in trajectories:
+                    if trajectory in grouped.index:
+                        value = grouped.loc[trajectory, metric]
+                        print(f"  {trajectory:12s}: {value:10.6f}")
+
+                # Find best trajectory for this metric
+                best_traj = grouped[metric].idxmin()
+                best_val = grouped[metric].min()
+                print(f"  → Best: {best_traj} ({best_val:.6f})")
+
+    # Overall summary table
+    print("\n" + "="*80)
+    print("OVERALL SUMMARY TABLE (Mean values)")
+    print("="*80 + "\n")
+
+    # Create pivot table for easier viewing
     for metric in metrics_to_compare:
-        if metric in grouped.columns:
-            best_controller = grouped[metric].idxmin()
-            best_value = grouped[metric].min()
-            print(f"{metric:15s}: {best_controller:10s} ({best_value:.6f})")
+        print(f"\n{metric}:")
+        pivot = df_results.pivot_table(
+            values=metric,
+            index='controller',
+            columns='trajectory',
+            aggfunc='mean'
+        )
+        print(pivot.to_string(float_format='%.6f'))
+        print()
 
     print("\n")
 
@@ -250,9 +417,23 @@ if __name__ == "__main__":
         df_results = analyze_directory(args.directory, args.output)
 
         if df_results is not None and len(df_results) > 0:
+            # Print executive summary first (most important)
+            print_executive_summary(df_results)
+
+            # Detailed statistics by trajectory
             print_summary_statistics(df_results)
+
+            # Best controller comparisons
             compare_controllers(df_results)
 
-            print("\nFor detailed results, see the CSV file:")
-            print(f"→ {os.path.join(args.directory, args.output)}")
+            # Cross-trajectory analysis
+            compare_trajectories(df_results)
 
+            print("\n" + "="*80)
+            print("ARCHIVOS GENERADOS")
+            print("="*80)
+            print(f"\n📊 Resumen detallado: {os.path.join(args.directory, args.output)}")
+            print(f"📁 Total de experimentos analizados: {len(df_results)}")
+            print(f"🎯 Trayectorias: {', '.join(sorted(df_results['trajectory'].unique()))}")
+            print(f"🤖 Controladores: {', '.join(sorted(df_results['controller'].unique()))}")
+            print("\n" + "="*80 + "\n")

@@ -1,0 +1,911 @@
+================================================================================
+CONTROLLER PERFORMANCE METRICS EVALUATION
+================================================================================
+
+Analyzing directory: tb3_runs
+
+Found 360 CSV files
+Calculating metrics...
+
+Processed: compuesta_lyapunov_20251112_143120.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_143445.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_143558.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_143709.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_143802.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_143853.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_143947.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_144134.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_144224.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_144316.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_144404.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_144452.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_144541.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_144630.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_144719.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_144814.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_145756.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_145844.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_145934.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_150023.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_150707.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_150758.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_150846.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_151124.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_151413.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_151524.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_151614.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_151705.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_151903.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_lyapunov_20251112_151955.csv (trajectory: compuesta, controller: lyapunov)
+Processed: compuesta_mpc_20251112_152219.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_152307.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_152359.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_152503.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_152558.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_152650.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_152745.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_153013.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_153435.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_153528.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_153618.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_153714.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_153805.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_153858.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_153948.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_154043.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_154132.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_154221.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_154311.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_154403.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_154459.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_154557.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_154658.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_154752.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_154845.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_154951.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_155118.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_155209.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_155258.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_mpc_20251112_155351.csv (trajectory: compuesta, controller: mpc)
+Processed: compuesta_pid_20251112_135359.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_135622.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_135757.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_135852.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_140035.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_140257.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_140417.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_140510.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_140611.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_140713.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_140815.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_140907.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_140954.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_141042.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_141421.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_141507.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_141604.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_141658.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_141749.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_141840.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_141929.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_142015.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_142110.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_142200.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_142255.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_142347.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_142448.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_142546.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_142635.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pid_20251112_142720.csv (trajectory: compuesta, controller: pid)
+Processed: compuesta_pure_20251107_150359.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_150726.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_150835.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_150952.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_151102.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_151217.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_151324.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_151419.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_151517.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_151619.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_151724.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_151825.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_151918.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_152020.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_152126.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_152228.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_152514.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_152628.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_152727.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_152825.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_153040.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_153132.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_153223.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_153314.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_153413.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_153501.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_153549.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_153637.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_153728.csv (trajectory: compuesta, controller: pure)
+Processed: compuesta_pure_20251107_153818.csv (trajectory: compuesta, controller: pure)
+Processed: lyapunov_20251101_152420.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_152537.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_152651.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_153054.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_153236.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_153354.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_153524.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_153735.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_153931.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_154102.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_154215.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_154334.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_154515.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_154632.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_154818.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_154930.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_155052.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_155224.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_155339.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_155451.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_155617.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_155750.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_155936.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_160053.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_160209.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_160350.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_160508.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_160631.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_160750.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: lyapunov_20251101_160945.csv (trajectory: cuadrada, controller: lyapunov)
+Processed: mpc_20251101_161158.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_161312.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_161428.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_161550.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_161712.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_161832.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_161944.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_162133.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_162247.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_162406.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_162536.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_162651.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_162834.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_163012.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_163309.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_163434.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_163631.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_163747.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_163920.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_164032.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_164157.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_164310.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_164425.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_164538.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_164652.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_164837.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_165010.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_165124.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_165239.csv (trajectory: cuadrada, controller: mpc)
+Processed: mpc_20251101_165351.csv (trajectory: cuadrada, controller: mpc)
+Processed: pid_run_20251101_143254.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_143624.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_143815.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_143943.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_144110.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_144233.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_144359.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_144624.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_144800.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_144924.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_145049.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_145209.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_145329.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_145450.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_145645.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_145824.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_145942.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_150110.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_150242.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_150404.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_150540.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_150657.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_150831.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_151022.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_151139.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_151445.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_151602.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_151723.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_151950.csv (trajectory: cuadrada, controller: pid)
+Processed: pid_run_20251101_152117.csv (trajectory: cuadrada, controller: pid)
+Processed: pure_20251101_165557.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_165658.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_165757.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_165850.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_170018.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_170111.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_170206.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_170305.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_170444.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_170544.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_170640.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_170737.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_170830.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_170950.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_171045.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_171140.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_171234.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_171331.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_171427.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_171539.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_171638.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_171818.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_171914.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_172058.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_172158.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_172254.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_172353.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_172448.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_172553.csv (trajectory: cuadrada, controller: pure)
+Processed: pure_20251101_172746.csv (trajectory: cuadrada, controller: pure)
+Processed: recta_PID_20251107_093359.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_093533.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_093611.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_093706.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_093745.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_093831.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_093907.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_094002.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_094235.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_094342.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_094443.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_094527.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_094626.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_094752.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_094841.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095029.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095120.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095159.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095247.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095343.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095449.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095523.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095557.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095655.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095740.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095816.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_095925.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_100006.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_100044.csv (trajectory: recta, controller: pid)
+Processed: recta_PID_20251107_101124.csv (trajectory: recta, controller: pid)
+Processed: recta_lyapunov_20251107_101531.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_101724.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_101812.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_102004.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_102244.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_102354.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_102534.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_102617.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_102815.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_103046.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_103134.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_103214.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_103329.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_103447.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_103544.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_103659.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_103754.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_103927.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_104025.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_104145.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_104324.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_104503.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_104603.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_104715.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_104824.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_104926.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_105026.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_105125.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_105220.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_lyapunov_20251107_105314.csv (trajectory: recta, controller: lyapunov)
+Processed: recta_mpc_20251107_105902.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_110006.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_110132.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_110232.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_110349.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_110450.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_110556.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_110704.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_110856.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_110958.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_111039.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_111139.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_111247.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_111352.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_111438.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_111522.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_111631.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_111725.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_111808.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_111923.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_112021.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_112059.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_112201.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_112325.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_112432.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_112528.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_112624.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_112757.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_112850.csv (trajectory: recta, controller: mpc)
+Processed: recta_mpc_20251107_112943.csv (trajectory: recta, controller: mpc)
+Processed: recta_pure_20251107_113210.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_113338.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_113433.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_113519.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_113616.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_113700.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114010.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114103.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114147.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114240.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114337.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114421.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114516.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114611.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114720.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114819.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114900.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_114932.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115001.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115043.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115116.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115157.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115241.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115309.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115348.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115418.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115451.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115549.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115621.csv (trajectory: recta, controller: pure)
+Processed: recta_pure_20251107_115656.csv (trajectory: recta, controller: pure)
+
+✓ Results saved to: tb3_runs/controller_metrics_summary.csv
+
+================================================================================
+RESUMEN EJECUTIVO - MEJORES CONTROLADORES POR TRAYECTORIA
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+  TRAYECTORIA: COMPUESTA
+────────────────────────────────────────────────────────────────────────────────
+
+  Controlador           IAE         ITAE          ISE          ICE
+  ------------------------------------------------------------
+  LYAPUNOV         0.655814    10.302093     0.018819     1.085585
+  MPC              0.183584     3.278320     0.001923     0.998786
+  PID              0.265717     4.796492     0.004815     1.387971
+  PURE             0.080036     0.931808     0.000404     0.992385
+
+  🏆 MEJORES (valores más bajos):
+      IAE: PURE       (0.080036)
+     ITAE: PURE       (0.931808)
+      ISE: PURE       (0.000404)
+      ICE: PURE       (0.992385)
+
+────────────────────────────────────────────────────────────────────────────────
+  TRAYECTORIA: CUADRADA
+────────────────────────────────────────────────────────────────────────────────
+
+  Controlador           IAE         ITAE          ISE          ICE
+  ------------------------------------------------------------
+  LYAPUNOV         0.754217    23.917904     0.018729     6.878916
+  MPC              0.412003    11.379136     0.004962     5.651398
+  PID              0.678970    26.034846     0.011924     5.848871
+  PURE             0.334093     6.789430     0.010082     4.061619
+
+  🏆 MEJORES (valores más bajos):
+      IAE: PURE       (0.334093)
+     ITAE: PURE       (6.789430)
+      ISE: MPC        (0.004962)
+      ICE: PURE       (4.061619)
+
+────────────────────────────────────────────────────────────────────────────────
+  TRAYECTORIA: RECTA
+────────────────────────────────────────────────────────────────────────────────
+
+  Controlador           IAE         ITAE          ISE          ICE
+  ------------------------------------------------------------
+  LYAPUNOV         0.028780     0.171628     0.000079     0.272241
+  MPC              0.077903     0.559881     0.000588     0.311139
+  PID              0.008936     0.059085     0.000008     0.293642
+  PURE             0.014747     0.067084     0.000026     0.319175
+
+  🏆 MEJORES (valores más bajos):
+      IAE: PID        (0.008936)
+     ITAE: PID        (0.059085)
+      ISE: PID        (0.000008)
+      ICE: LYAPUNOV   (0.272241)
+
+================================================================================
+
+
+================================================================================
+TRAJECTORY: COMPUESTA
+================================================================================
+
+LYAPUNOV Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.655814 ±   0.016663 (Min=  0.586574, Max=  0.678375)
+ITAE           : Mean= 10.302093 ±   0.223197 (Min=  9.255542, Max= 10.512695)
+ISE            : Mean=  0.018819 ±   0.000898 (Min=  0.015824, Max=  0.019956)
+ICE            : Mean=  1.085585 ±   0.113504 (Min=  0.981837, Max=  1.644920)
+max_error      : Mean=  0.034140 ±   0.000891 (Min=  0.029700, Max=  0.035200)
+mean_error     : Mean=  0.024131 ±   0.000816 (Min=  0.020983, Max=  0.025127)
+final_error    : Mean=  0.008497 ±   0.000775 (Min=  0.004700, Max=  0.009100)
+
+MPC Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.183584 ±   0.006610 (Min=  0.166027, Max=  0.195844)
+ITAE           : Mean=  3.278320 ±   0.112138 (Min=  2.993094, Max=  3.477616)
+ISE            : Mean=  0.001923 ±   0.000110 (Min=  0.001616, Max=  0.002123)
+ICE            : Mean=  0.998786 ±   0.003838 (Min=  0.988135, Max=  1.008926)
+max_error      : Mean=  0.012620 ±   0.000259 (Min=  0.012100, Max=  0.013300)
+mean_error     : Mean=  0.006938 ±   0.000315 (Min=  0.006221, Max=  0.008016)
+final_error    : Mean=  0.003240 ±   0.000834 (Min=  0.002200, Max=  0.006100)
+
+PID Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.265717 ±   0.008405 (Min=  0.247726, Max=  0.288084)
+ITAE           : Mean=  4.796492 ±   0.140606 (Min=  4.478415, Max=  5.088601)
+ISE            : Mean=  0.004815 ±   0.000288 (Min=  0.004195, Max=  0.005514)
+ICE            : Mean=  1.387971 ±   0.167670 (Min=  1.063642, Max=  1.674299)
+max_error      : Mean=  0.023393 ±   0.000814 (Min=  0.021900, Max=  0.024900)
+mean_error     : Mean=  0.010622 ±   0.000346 (Min=  0.009897, Max=  0.011601)
+final_error    : Mean=  0.007740 ±   0.000712 (Min=  0.006900, Max=  0.010700)
+
+PURE Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.080036 ±   0.016037 (Min=  0.055352, Max=  0.138772)
+ITAE           : Mean=  0.931808 ±   0.132648 (Min=  0.705581, Max=  1.288772)
+ISE            : Mean=  0.000404 ±   0.000220 (Min=  0.000218, Max=  0.001305)
+ICE            : Mean=  0.992385 ±   0.018907 (Min=  0.979043, Max=  1.086365)
+max_error      : Mean=  0.009863 ±   0.006948 (Min=  0.005500, Max=  0.045000)
+mean_error     : Mean=  0.003194 ±   0.000632 (Min=  0.002216, Max=  0.005424)
+final_error    : Mean=  0.002823 ±   0.007972 (Min=  0.000900, Max=  0.045000)
+
+--------------------------------------------------------------------------------
+COMPARISON FOR COMPUESTA TRAJECTORY (Mean values)
+--------------------------------------------------------------------------------
+                 IAE       ITAE       ISE       ICE  max_error  mean_error  final_error
+controller                                                                             
+lyapunov    0.655814  10.302093  0.018819  1.085585   0.034140    0.024131     0.008497
+mpc         0.183584   3.278320  0.001923  0.998786   0.012620    0.006938     0.003240
+pid         0.265717   4.796492  0.004815  1.387971   0.023393    0.010622     0.007740
+pure        0.080036   0.931808  0.000404  0.992385   0.009863    0.003194     0.002823
+
+
+
+================================================================================
+TRAJECTORY: CUADRADA
+================================================================================
+
+LYAPUNOV Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.754217 ±   0.020253 (Min=  0.709500, Max=  0.788869)
+ITAE           : Mean= 23.917904 ±   0.617330 (Min= 22.495828, Max= 25.000785)
+ISE            : Mean=  0.018729 ±   0.000917 (Min=  0.017054, Max=  0.020518)
+ICE            : Mean=  6.878916 ±   0.053616 (Min=  6.784678, Max=  7.037782)
+max_error      : Mean=  0.040293 ±   0.001032 (Min=  0.037800, Max=  0.042200)
+mean_error     : Mean=  0.013743 ±   0.000365 (Min=  0.012972, Max=  0.014359)
+final_error    : Mean=  0.002410 ±   0.000071 (Min=  0.002300, Max=  0.002500)
+
+MPC Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.412003 ±   0.020828 (Min=  0.360761, Max=  0.465274)
+ITAE           : Mean= 11.379136 ±   0.656341 (Min= 10.022011, Max= 12.558613)
+ISE            : Mean=  0.004962 ±   0.000394 (Min=  0.004024, Max=  0.005752)
+ICE            : Mean=  5.651398 ±   0.033765 (Min=  5.600752, Max=  5.786955)
+max_error      : Mean=  0.031383 ±   0.000712 (Min=  0.030600, Max=  0.033600)
+mean_error     : Mean=  0.007584 ±   0.000393 (Min=  0.006625, Max=  0.008567)
+final_error    : Mean=  0.004837 ±   0.000886 (Min=  0.003800, Max=  0.008400)
+
+PID Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.678970 ±   0.059910 (Min=  0.640209, Max=  0.977883)
+ITAE           : Mean= 26.034846 ±   5.061587 (Min= 23.855844, Max= 52.410448)
+ISE            : Mean=  0.011924 ±   0.000832 (Min=  0.010723, Max=  0.013873)
+ICE            : Mean=  5.848871 ±   0.122621 (Min=  5.598828, Max=  6.106656)
+max_error      : Mean=  0.027057 ±   0.001141 (Min=  0.024800, Max=  0.029600)
+mean_error     : Mean=  0.010496 ±   0.000587 (Min=  0.008015, Max=  0.011330)
+final_error    : Mean=  0.004717 ±   0.000079 (Min=  0.004500, Max=  0.004900)
+
+PURE Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.334093 ±   0.009255 (Min=  0.311844, Max=  0.353174)
+ITAE           : Mean=  6.789430 ±   0.238480 (Min=  6.311391, Max=  7.375957)
+ISE            : Mean=  0.010082 ±   0.000262 (Min=  0.009587, Max=  0.010479)
+ICE            : Mean=  4.061619 ±   0.029498 (Min=  4.004499, Max=  4.129239)
+max_error      : Mean=  0.071800 ±   0.000669 (Min=  0.070200, Max=  0.073000)
+mean_error     : Mean=  0.008678 ±   0.000246 (Min=  0.008128, Max=  0.009210)
+final_error    : Mean=  0.001220 ±   0.000607 (Min=  0.000200, Max=  0.002700)
+
+--------------------------------------------------------------------------------
+COMPARISON FOR CUADRADA TRAJECTORY (Mean values)
+--------------------------------------------------------------------------------
+                 IAE       ITAE       ISE       ICE  max_error  mean_error  final_error
+controller                                                                             
+lyapunov    0.754217  23.917904  0.018729  6.878916   0.040293    0.013743     0.002410
+mpc         0.412003  11.379136  0.004962  5.651398   0.031383    0.007584     0.004837
+pid         0.678970  26.034846  0.011924  5.848871   0.027057    0.010496     0.004717
+pure        0.334093   6.789430  0.010082  4.061619   0.071800    0.008678     0.001220
+
+
+
+================================================================================
+TRAJECTORY: RECTA
+================================================================================
+
+LYAPUNOV Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.028780 ±   0.003498 (Min=  0.014732, Max=  0.033279)
+ITAE           : Mean=  0.171628 ±   0.020534 (Min=  0.098504, Max=  0.198561)
+ISE            : Mean=  0.000079 ±   0.000016 (Min=  0.000021, Max=  0.000106)
+ICE            : Mean=  0.272241 ±   0.003579 (Min=  0.269502, Max=  0.288897)
+max_error      : Mean=  0.003723 ±   0.000434 (Min=  0.002000, Max=  0.004400)
+mean_error     : Mean=  0.002099 ±   0.000256 (Min=  0.001076, Max=  0.002430)
+final_error    : Mean=  0.000147 ±   0.000051 (Min=  0.000100, Max=  0.000200)
+
+MPC Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.077903 ±   0.011316 (Min=  0.060580, Max=  0.104128)
+ITAE           : Mean=  0.559881 ±   0.085647 (Min=  0.442869, Max=  0.762974)
+ISE            : Mean=  0.000588 ±   0.000180 (Min=  0.000360, Max=  0.001034)
+ICE            : Mean=  0.311139 ±   0.001231 (Min=  0.308219, Max=  0.313611)
+max_error      : Mean=  0.009670 ±   0.001511 (Min=  0.007200, Max=  0.013000)
+mean_error     : Mean=  0.005747 ±   0.000822 (Min=  0.004454, Max=  0.007638)
+final_error    : Mean=  0.002060 ±   0.000417 (Min=  0.001500, Max=  0.002800)
+
+PID Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.008936 ±   0.002455 (Min=  0.004699, Max=  0.015647)
+ITAE           : Mean=  0.059085 ±   0.044111 (Min=  0.026024, Max=  0.274518)
+ISE            : Mean=  0.000008 ±   0.000004 (Min=  0.000003, Max=  0.000020)
+ICE            : Mean=  0.293642 ±   0.004742 (Min=  0.288456, Max=  0.310040)
+max_error      : Mean=  0.001350 ±   0.000314 (Min=  0.000800, Max=  0.002200)
+mean_error     : Mean=  0.000475 ±   0.000144 (Min=  0.000191, Max=  0.000754)
+final_error    : Mean=  0.000140 ±   0.000062 (Min=  0.000000, Max=  0.000200)
+
+PURE Controller (30 runs)
+--------------------------------------------------------------------------------
+IAE            : Mean=  0.014747 ±   0.001605 (Min=  0.010703, Max=  0.017323)
+ITAE           : Mean=  0.067084 ±   0.009114 (Min=  0.041500, Max=  0.082109)
+ISE            : Mean=  0.000026 ±   0.000005 (Min=  0.000018, Max=  0.000034)
+ICE            : Mean=  0.319175 ±   0.001711 (Min=  0.315746, Max=  0.325230)
+max_error      : Mean=  0.002420 ±   0.000321 (Min=  0.001800, Max=  0.002900)
+mean_error     : Mean=  0.001499 ±   0.000162 (Min=  0.001088, Max=  0.001759)
+final_error    : Mean=  0.000210 ±   0.000121 (Min=  0.000000, Max=  0.000500)
+
+--------------------------------------------------------------------------------
+COMPARISON FOR RECTA TRAJECTORY (Mean values)
+--------------------------------------------------------------------------------
+                 IAE      ITAE       ISE       ICE  max_error  mean_error  final_error
+controller                                                                            
+lyapunov    0.028780  0.171628  0.000079  0.272241   0.003723    0.002099     0.000147
+mpc         0.077903  0.559881  0.000588  0.311139   0.009670    0.005747     0.002060
+pid         0.008936  0.059085  0.000008  0.293642   0.001350    0.000475     0.000140
+pure        0.014747  0.067084  0.000026  0.319175   0.002420    0.001499     0.000210
+
+
+
+================================================================================
+BEST CONTROLLER FOR EACH METRIC - COMPUESTA TRAJECTORY
+(Lower is better)
+================================================================================
+
+IAE            : Best=pure       (0.080036)  Worst=lyapunov   (0.655814)
+ITAE           : Best=pure       (0.931808)  Worst=lyapunov   (10.302093)
+ISE            : Best=pure       (0.000404)  Worst=lyapunov   (0.018819)
+ICE            : Best=pure       (0.992385)  Worst=pid        (1.387971)
+max_error      : Best=pure       (0.009863)  Worst=lyapunov   (0.034140)
+mean_error     : Best=pure       (0.003194)  Worst=lyapunov   (0.024131)
+final_error    : Best=pure       (0.002823)  Worst=lyapunov   (0.008497)
+
+
+
+================================================================================
+BEST CONTROLLER FOR EACH METRIC - CUADRADA TRAJECTORY
+(Lower is better)
+================================================================================
+
+IAE            : Best=pure       (0.334093)  Worst=lyapunov   (0.754217)
+ITAE           : Best=pure       (6.789430)  Worst=pid        (26.034846)
+ISE            : Best=mpc        (0.004962)  Worst=lyapunov   (0.018729)
+ICE            : Best=pure       (4.061619)  Worst=lyapunov   (6.878916)
+max_error      : Best=pid        (0.027057)  Worst=pure       (0.071800)
+mean_error     : Best=mpc        (0.007584)  Worst=lyapunov   (0.013743)
+final_error    : Best=pure       (0.001220)  Worst=mpc        (0.004837)
+
+
+
+================================================================================
+BEST CONTROLLER FOR EACH METRIC - RECTA TRAJECTORY
+(Lower is better)
+================================================================================
+
+IAE            : Best=pid        (0.008936)  Worst=mpc        (0.077903)
+ITAE           : Best=pid        (0.059085)  Worst=mpc        (0.559881)
+ISE            : Best=pid        (0.000008)  Worst=mpc        (0.000588)
+ICE            : Best=lyapunov   (0.272241)  Worst=pure       (0.319175)
+max_error      : Best=pid        (0.001350)  Worst=mpc        (0.009670)
+mean_error     : Best=pid        (0.000475)  Worst=mpc        (0.005747)
+final_error    : Best=pid        (0.000140)  Worst=mpc        (0.002060)
+
+
+
+================================================================================
+TRAJECTORY COMPARISON BY CONTROLLER
+(Mean values - Lower is better for all metrics)
+================================================================================
+
+
+LYAPUNOV Controller
+--------------------------------------------------------------------------------
+
+IAE            :
+  compuesta   :   0.655814
+  cuadrada    :   0.754217
+  recta       :   0.028780
+  → Best: recta (0.028780)
+
+ITAE           :
+  compuesta   :  10.302093
+  cuadrada    :  23.917904
+  recta       :   0.171628
+  → Best: recta (0.171628)
+
+ISE            :
+  compuesta   :   0.018819
+  cuadrada    :   0.018729
+  recta       :   0.000079
+  → Best: recta (0.000079)
+
+ICE            :
+  compuesta   :   1.085585
+  cuadrada    :   6.878916
+  recta       :   0.272241
+  → Best: recta (0.272241)
+
+max_error      :
+  compuesta   :   0.034140
+  cuadrada    :   0.040293
+  recta       :   0.003723
+  → Best: recta (0.003723)
+
+mean_error     :
+  compuesta   :   0.024131
+  cuadrada    :   0.013743
+  recta       :   0.002099
+  → Best: recta (0.002099)
+
+final_error    :
+  compuesta   :   0.008497
+  cuadrada    :   0.002410
+  recta       :   0.000147
+  → Best: recta (0.000147)
+
+MPC Controller
+--------------------------------------------------------------------------------
+
+IAE            :
+  compuesta   :   0.183584
+  cuadrada    :   0.412003
+  recta       :   0.077903
+  → Best: recta (0.077903)
+
+ITAE           :
+  compuesta   :   3.278320
+  cuadrada    :  11.379136
+  recta       :   0.559881
+  → Best: recta (0.559881)
+
+ISE            :
+  compuesta   :   0.001923
+  cuadrada    :   0.004962
+  recta       :   0.000588
+  → Best: recta (0.000588)
+
+ICE            :
+  compuesta   :   0.998786
+  cuadrada    :   5.651398
+  recta       :   0.311139
+  → Best: recta (0.311139)
+
+max_error      :
+  compuesta   :   0.012620
+  cuadrada    :   0.031383
+  recta       :   0.009670
+  → Best: recta (0.009670)
+
+mean_error     :
+  compuesta   :   0.006938
+  cuadrada    :   0.007584
+  recta       :   0.005747
+  → Best: recta (0.005747)
+
+final_error    :
+  compuesta   :   0.003240
+  cuadrada    :   0.004837
+  recta       :   0.002060
+  → Best: recta (0.002060)
+
+PID Controller
+--------------------------------------------------------------------------------
+
+IAE            :
+  compuesta   :   0.265717
+  cuadrada    :   0.678970
+  recta       :   0.008936
+  → Best: recta (0.008936)
+
+ITAE           :
+  compuesta   :   4.796492
+  cuadrada    :  26.034846
+  recta       :   0.059085
+  → Best: recta (0.059085)
+
+ISE            :
+  compuesta   :   0.004815
+  cuadrada    :   0.011924
+  recta       :   0.000008
+  → Best: recta (0.000008)
+
+ICE            :
+  compuesta   :   1.387971
+  cuadrada    :   5.848871
+  recta       :   0.293642
+  → Best: recta (0.293642)
+
+max_error      :
+  compuesta   :   0.023393
+  cuadrada    :   0.027057
+  recta       :   0.001350
+  → Best: recta (0.001350)
+
+mean_error     :
+  compuesta   :   0.010622
+  cuadrada    :   0.010496
+  recta       :   0.000475
+  → Best: recta (0.000475)
+
+final_error    :
+  compuesta   :   0.007740
+  cuadrada    :   0.004717
+  recta       :   0.000140
+  → Best: recta (0.000140)
+
+PURE Controller
+--------------------------------------------------------------------------------
+
+IAE            :
+  compuesta   :   0.080036
+  cuadrada    :   0.334093
+  recta       :   0.014747
+  → Best: recta (0.014747)
+
+ITAE           :
+  compuesta   :   0.931808
+  cuadrada    :   6.789430
+  recta       :   0.067084
+  → Best: recta (0.067084)
+
+ISE            :
+  compuesta   :   0.000404
+  cuadrada    :   0.010082
+  recta       :   0.000026
+  → Best: recta (0.000026)
+
+ICE            :
+  compuesta   :   0.992385
+  cuadrada    :   4.061619
+  recta       :   0.319175
+  → Best: recta (0.319175)
+
+max_error      :
+  compuesta   :   0.009863
+  cuadrada    :   0.071800
+  recta       :   0.002420
+  → Best: recta (0.002420)
+
+mean_error     :
+  compuesta   :   0.003194
+  cuadrada    :   0.008678
+  recta       :   0.001499
+  → Best: recta (0.001499)
+
+final_error    :
+  compuesta   :   0.002823
+  cuadrada    :   0.001220
+  recta       :   0.000210
+  → Best: recta (0.000210)
+
+================================================================================
+OVERALL SUMMARY TABLE (Mean values)
+================================================================================
+
+
+IAE:
+trajectory  compuesta  cuadrada    recta
+controller                              
+lyapunov     0.655814  0.754217 0.028780
+mpc          0.183584  0.412003 0.077903
+pid          0.265717  0.678970 0.008936
+pure         0.080036  0.334093 0.014747
+
+
+ITAE:
+trajectory  compuesta  cuadrada    recta
+controller                              
+lyapunov    10.302093 23.917904 0.171628
+mpc          3.278320 11.379136 0.559881
+pid          4.796492 26.034846 0.059085
+pure         0.931808  6.789430 0.067084
+
+
+ISE:
+trajectory  compuesta  cuadrada    recta
+controller                              
+lyapunov     0.018819  0.018729 0.000079
+mpc          0.001923  0.004962 0.000588
+pid          0.004815  0.011924 0.000008
+pure         0.000404  0.010082 0.000026
+
+
+ICE:
+trajectory  compuesta  cuadrada    recta
+controller                              
+lyapunov     1.085585  6.878916 0.272241
+mpc          0.998786  5.651398 0.311139
+pid          1.387971  5.848871 0.293642
+pure         0.992385  4.061619 0.319175
+
+
+max_error:
+trajectory  compuesta  cuadrada    recta
+controller                              
+lyapunov     0.034140  0.040293 0.003723
+mpc          0.012620  0.031383 0.009670
+pid          0.023393  0.027057 0.001350
+pure         0.009863  0.071800 0.002420
+
+
+mean_error:
+trajectory  compuesta  cuadrada    recta
+controller                              
+lyapunov     0.024131  0.013743 0.002099
+mpc          0.006938  0.007584 0.005747
+pid          0.010622  0.010496 0.000475
+pure         0.003194  0.008678 0.001499
+
+
+final_error:
+trajectory  compuesta  cuadrada    recta
+controller                              
+lyapunov     0.008497  0.002410 0.000147
+mpc          0.003240  0.004837 0.002060
+pid          0.007740  0.004717 0.000140
+pure         0.002823  0.001220 0.000210
+
+
+
+
+================================================================================
+ARCHIVOS GENERADOS
+================================================================================
+
+📊 Resumen detallado: tb3_runs/controller_metrics_summary.csv
+📁 Total de experimentos analizados: 360
+🎯 Trayectorias: compuesta, cuadrada, recta
+🤖 Controladores: lyapunov, mpc, pid, pure
+
+================================================================================
+
