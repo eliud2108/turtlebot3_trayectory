@@ -59,16 +59,16 @@ def calculate_controller_stats(csv_files):
     controller_data = {}
 
     for csv_file in csv_files:
-        filename = os.path.basename(csv_file)
+        filename = os.path.basename(csv_file).lower()
 
-        # Detect controller type
-        if filename.startswith('pid'):
+        # Detect controller type (checking anywhere in filename)
+        if '_pid_' in filename or filename.startswith('pid'):
             controller = 'pid'
-        elif filename.startswith('lyapunov'):
+        elif '_lyapunov_' in filename or filename.startswith('lyapunov'):
             controller = 'lyapunov'
-        elif filename.startswith('mpc'):
+        elif '_mpc_' in filename or filename.startswith('mpc'):
             controller = 'mpc'
-        elif filename.startswith('pure'):
+        elif '_pure' in filename or filename.startswith('pure'):
             controller = 'pure'
         else:
             continue
