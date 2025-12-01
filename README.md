@@ -1,5 +1,47 @@
 This repository contains the implementation of four controllers for trajectory performance analysis on the turtlebot3 waffle robot. The controllers used are: PID, Lyapunov, Pure Pursuit, and MPC. Metrics are stored in the tb3_runs folder for later analysis.
 
+## Diagramas de Bloques de los Controladores
+
+El repositorio incluye documentación visual completa de los controladores mediante diagramas de bloques. Esta documentación permite entender la estructura y el flujo de cada algoritmo de control.
+
+### 📚 Acceder a los Diagramas
+
+Los diagramas de bloques están disponibles en formato Mermaid en el archivo:
+
+**[`docs/controller_block_diagrams.md`](docs/controller_block_diagrams.md)**
+
+Este archivo incluye:
+- ✅ Diagramas de bloques detallados para PID, Lyapunov, Pure Pursuit y MPC
+- ✅ Ecuaciones de control de cada algoritmo
+- ✅ Parámetros de configuración y valores típicos
+- ✅ Tabla comparativa de controladores
+- ✅ Referencias teóricas y de implementación
+
+Los diagramas se renderizan automáticamente en GitHub sin necesidad de instalación adicional.
+
+### 🎨 Generar Diagramas PNG (Opcional)
+
+Si deseas generar diagramas en formato PNG de alta calidad para presentaciones:
+
+```bash
+# Instalar dependencias
+pip3 install -r requirements-docs.txt
+
+# Generar diagramas
+python3 scripts/generate_block_diagrams.py
+```
+
+Los diagramas PNG se generan en `docs/diagrams/`.
+
+### 📊 Controladores Documentados
+
+| Controlador | Tipo | Frecuencia | Complejidad | Características |
+|------------|------|------------|-------------|-----------------|
+| **PID** | Clásico | 100 Hz | Baja | Simple, empírico, anti-windup |
+| **Lyapunov** | Teórico | 50-80 Hz | Media | Estabilidad probada, lookahead adaptativo |
+| **Pure Pursuit** | Geométrico | 20 Hz | Media | Basado en curvatura, seguimiento suave |
+| **MPC** | Predictivo | 10-14 Hz | Alta | Optimización, horizonte N pasos |
+
 ## Análisis de Desempeño
 
 Este repositorio incluye herramientas para evaluar y visualizar el desempeño de los controladores.

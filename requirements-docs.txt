@@ -1,0 +1,10 @@
+# Requisitos para generar documentación y diagramas
+# Instalar con: pip install -r requirements-docs.txt
+
+# Para generar diagramas de bloques en PNG
+matplotlib>=3.5.0
+numpy>=1.21.0
+
+# Para convertir diagramas Mermaid a PNG (opcional)
+# Requiere Node.js instalado
+# npm install -g @mermaid-js/mermaid-cli
