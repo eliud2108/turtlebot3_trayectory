@@ -41,6 +41,21 @@ def plot_individual_controller(csv_file, output_dir='charts'):
     filename = os.path.basename(csv_file)
     controller_name = filename.split('_')[0]
 
+    # Detect and remove dead time (when robot has stopped)
+    # Find the last point where there is significant movement
+    velocity_threshold = 0.01  # m/s
+    error_threshold = 0.01  # m
+
+    # Look for the last index where velocity or error is significant
+    active_indices = (np.abs(df['v']) > velocity_threshold) | (np.abs(df['w']) > 0.05) | (np.abs(df['err']) > error_threshold)
+
+    if active_indices.any():
+        last_active_idx = np.where(active_indices)[0][-1]
+        # Add some buffer (5% of total time or at least 10 samples)
+        buffer = max(10, int(len(df) * 0.05))
+        end_idx = min(len(df), last_active_idx + buffer)
+        df = df.iloc[:end_idx].copy()
+
     # Create figure with subplots
     fig = plt.figure(figsize=(15, 10))
     fig.suptitle(f'Controller Performance: {filename}', fontsize=16, fontweight='bold')
@@ -172,6 +187,9 @@ def generate_summary_comparison(directory_path, output_dir='charts'):
             v = df['v'].values
             w = df['w'].values
 
+            # Calculate distance traveled (integral of velocity magnitude)
+            distance_traveled = np.trapezoid(np.abs(v), t)
+
             metrics = {
                 'IAE': np.trapezoid(np.abs(err), t),
                 'ISE': np.trapezoid(err**2, t),
@@ -179,7 +197,8 @@ def generate_summary_comparison(directory_path, output_dir='charts'):
                 'max_error': np.max(np.abs(err)),
                 'mean_error': np.mean(np.abs(err)),
                 'final_error': np.abs(err[-1]),
-                'total_time': t[-1] - t[0]
+                'total_time': t[-1] - t[0],
+                'distance_traveled': distance_traveled
             }
 
             controller_data[controller_type].append(metrics)
@@ -328,15 +347,15 @@ def generate_statistics_table(controller_stats, output_dir):
         controller_stats (dict): Controller statistics dictionary
         output_dir (str): Directory to save output
     """
-    fig, ax = plt.subplots(figsize=(14, 8))
+    fig, ax = plt.subplots(figsize=(14, 10))
     ax.axis('tight')
     ax.axis('off')
 
     # Prepare table data
     controllers = list(controller_stats.keys())
-    metrics = ['IAE', 'ISE', 'ICE', 'mean_error', 'max_error', 'final_error']
+    metrics = ['IAE', 'ISE', 'ICE', 'mean_error', 'max_error', 'final_error', 'total_time', 'distance_traveled']
     metric_names = ['IAE (m·s)', 'ISE (m²·s)', 'ICE', 'Mean Error (m)',
-                    'Max Error (m)', 'Final Error (m)']
+                    'Max Error (m)', 'Final Error (m)', 'Total Time (s)', 'Distance Traveled (m)']
 
     table_data = []
     table_data.append(['Metric'] + [f'{c.upper()}' for c in controllers])
@@ -367,10 +386,10 @@ def generate_statistics_table(controller_stats, output_dir):
         table[(i, 0)].set_facecolor('#E8E8E8')
         table[(i, 0)].set_text_props(weight='bold')
 
-    # Highlight best values in each row
+    # Highlight best values in each row (lower is better for all metrics)
     for i, metric in enumerate(metrics, start=1):
         means = [controller_stats[c][metric]['mean'] for c in controllers]
-        best_idx = means.index(min(means))  # Lower is better
+        best_idx = means.index(min(means))  # Lower is better for all metrics
         table[(i, best_idx + 1)].set_facecolor('#90EE90')
         table[(i, best_idx + 1)].set_text_props(weight='bold')
 
