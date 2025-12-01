@@ -10,30 +10,52 @@ import glob
 import os
 
 def detect_trajectory_type(csv_file):
-    """Detect trajectory type from CSV data."""
+    """Detect trajectory type from CSV data or filename."""
+    filename = os.path.basename(csv_file).lower()
+
+    # First check filename
+    if filename.startswith('recta_'):
+        return 'recta'
+    elif filename.startswith('cuadrada_'):
+        return 'cuadrada'
+    elif filename.startswith('compuesta_'):
+        return 'compuesta'
+
+    # If no trajectory prefix, analyze the data
     df = pd.read_csv(csv_file)
 
     max_x = df['ref_x'].max()
     max_y = df['ref_y'].max()
+    min_x = df['ref_x'].min()
     min_y = df['ref_y'].min()
 
+    x_variation = max_x - min_x
     y_variation = max_y - min_y
 
-    # Classify trajectory
-    if y_variation < 0.2:  # Straight line
+    # Classify trajectory based on reference path shape
+    if y_variation < 0.2:  # Straight line (mostly horizontal)
         return 'recta'
-    elif max_x > 1.5 and max_y > 1.5:
-        # Check if it's square (sharp corners) or compound (smooth arc)
-        dx = np.diff(df['ref_x'].values)
-        dy = np.diff(df['ref_y'].values)
+    elif x_variation > 1.5 and y_variation > 1.5:
+        # Both x and y vary significantly - could be square or compound
+        # Check if it forms a closed loop (square)
+        ref_x = df['ref_x'].values
+        ref_y = df['ref_y'].values
 
-        # Count smooth transitions
-        smooth_changes = np.sum((np.abs(dx) < 0.01) & (np.abs(dy) < 0.01))
+        # Check if it returns to origin
+        final_distance = np.sqrt((ref_x[-1] - ref_x[0])**2 + (ref_y[-1] - ref_y[0])**2)
 
-        if smooth_changes > len(df) * 0.3:
-            return 'compuesta'
-        else:
+        # Count direction changes (corners)
+        dx = np.diff(ref_x)
+        dy = np.diff(ref_y)
+
+        # Detect corners (sharp direction changes)
+        angle_changes = np.abs(np.diff(np.arctan2(dy[1:], dx[1:])))
+        corners = np.sum(angle_changes > np.pi/4)  # ~45 degrees or more
+
+        if corners >= 3 and final_distance < 0.5:  # Closed loop with corners = square
             return 'cuadrada'
+        else:
+            return 'compuesta'
     else:
         return 'unknown'
 
@@ -59,16 +81,17 @@ def calculate_controller_stats(csv_files):
     controller_data = {}
 
     for csv_file in csv_files:
-        filename = os.path.basename(csv_file)
+        filename = os.path.basename(csv_file).lower()
 
-        # Detect controller type
-        if filename.startswith('pid'):
+        # Detect controller type from filename
+        # Handles formats: {traj}_{controller}_{date}.csv OR {controller}_{date}.csv
+        if 'pid' in filename:
             controller = 'pid'
-        elif filename.startswith('lyapunov'):
+        elif 'lyapunov' in filename:
             controller = 'lyapunov'
-        elif filename.startswith('mpc'):
+        elif 'mpc' in filename:
             controller = 'mpc'
-        elif filename.startswith('pure'):
+        elif 'pure' in filename:
             controller = 'pure'
         else:
             continue
