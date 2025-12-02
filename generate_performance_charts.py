@@ -41,19 +41,34 @@ def plot_individual_controller(csv_file, output_dir='charts'):
     filename = os.path.basename(csv_file)
     controller_name = filename.split('_')[0]
 
-    # Detect and remove dead time (when robot has stopped)
-    # Find the last point where there is significant movement
-    velocity_threshold = 0.01  # m/s
-    error_threshold = 0.01  # m
+    # Detect and remove dead time (when trajectory reference stops changing)
+    # This indicates the trajectory tracking is complete
+    ref_x_diff = np.abs(np.diff(df['ref_x']))
+    ref_y_diff = np.abs(np.diff(df['ref_y']))
+    ref_change = ref_x_diff + ref_y_diff
 
-    # Look for the last index where velocity or error is significant
-    active_indices = (np.abs(df['v']) > velocity_threshold) | (np.abs(df['w']) > 0.05) | (np.abs(df['err']) > error_threshold)
+    # Find where reference stops changing significantly (< 0.001 m change)
+    ref_stable = ref_change < 0.001
 
-    if active_indices.any():
-        last_active_idx = np.where(active_indices)[0][-1]
-        # Add some buffer (5% of total time or at least 10 samples)
-        buffer = max(10, int(len(df) * 0.05))
-        end_idx = min(len(df), last_active_idx + buffer)
+    # Find first sustained stable period (at least 50 consecutive stable points)
+    stable_threshold = 50
+    stable_count = 0
+    cutoff_idx = len(df) - 1
+
+    for i in range(len(ref_stable)):
+        if ref_stable[i]:
+            stable_count += 1
+            if stable_count >= stable_threshold:
+                cutoff_idx = i
+                break
+        else:
+            stable_count = 0
+
+    # Add a buffer after cutoff (10% of remaining time or at least 20 samples)
+    buffer = max(20, int((len(df) - cutoff_idx) * 0.1))
+    end_idx = min(len(df), cutoff_idx + buffer)
+
+    if end_idx < len(df) * 0.95:  # Only trim if we're removing at least 5%
         df = df.iloc[:end_idx].copy()
 
     # Create figure with subplots
